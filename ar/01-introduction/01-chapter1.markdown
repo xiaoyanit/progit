@@ -168,7 +168,7 @@ If a particular version of a file is in the git directory, it’s considered com
 
 هناك طريقتين للتنصيب على  ماك أو اس، الأسهل هي استخدام الواجهة الرسومية للتنصيب، والتي يمكنك تحميلها من صفحة المشروع على غوغل كود (انظر الشكل 1-7):
 
-	http://code.google.com/p/git-osx-installer
+	http://sourceforge.net/projects/git-osx-installer/
 
 Insert 18333fig0107.png 
 الشكل 1-7. تنصيب Git على ماك أو اس.
@@ -184,7 +184,7 @@ Insert 18333fig0107.png
 
 يمكنك تنصيب Git على نظام ويندوز بسهولة. أحد أسهل الطرق هو استخدام مشروع msysGit. يمكنك تنصيب البرنامج من صفحة المشروع على غوغل كود:
 
-	http://code.google.com/p/msysgit
+	http://msysgit.github.com/
 
 بعد التنصيب سيكون لدين نسختين من الأداة للـ command-line في ويندوز (بالإضافة الى أداة SSH والتي ستستفيد منها لاحقاً) والأداة بالواجهة الرسومية الإعتيادية.
 

@@ -4,7 +4,7 @@ So far, I’ve covered the basics of how Git works and how to use it, and I’ve
 
 ## Git Configuration ##
 
-As you briefly saw in the Chapter 1, you can specify Git configuration settings with the `git config` command. One of the first things you did was set up your name and e-mail address:
+As you briefly saw in Chapter 1, you can specify Git configuration settings with the `git config` command. One of the first things you did was set up your name and e-mail address:
 
 	$ git config --global user.name "John Doe"
 	$ git config --global user.email johndoe@example.com
@@ -93,7 +93,7 @@ You can put patterns in your project’s `.gitignore` file to have Git not see t
 
 #### help.autocorrect ####
 
-This option is available only in Git 1.6.1 and later. If you mistype a command in Git 1.6, it shows you something like this:
+This option is available only in Git 1.6.1 and later. If you mistype a command in Git, it shows you something like this:
 
 	$ git com
 	git: 'com' is not a git-command. See 'git --help'.
@@ -113,13 +113,13 @@ Git automatically colors most of its output if you ask it to. You can get very s
 
 	$ git config --global color.ui true
 
-When that value is set, Git colors its output if the output goes to a terminal. Other possible settings are false, which never colors the output, and always, which sets colors all the time, even if you’re redirecting Git commands to a file or piping them to another command. This setting was added in Git version 1.5.5; if you have an older version, you’ll have to specify all the color settings individually.
+When that value is set, Git colors its output if the output goes to a terminal. Other possible settings are false, which never colors the output, and always, which sets colors all the time, even if you’re redirecting Git commands to a file or piping them to another command.
 
 You’ll rarely want `color.ui = always`. In most scenarios, if you want color codes in your redirected output, you can instead pass a `--color` flag to the Git command to force it to use color codes. The `color.ui = true` setting is almost always what you’ll want to use.
 
 #### `color.*` ####
 
-If you want to be more specific about which commands are colored and how, or you have an older version, Git provides verb-specific coloring settings. Each of these can be set to `true`, `false`, or `always`:
+If you want to be more specific about which commands are colored and how, Git provides verb-specific coloring settings. Each of these can be set to `true`, `false`, or `always`:
 
 	color.branch
 	color.diff
@@ -130,7 +130,7 @@ In addition, each of these has subsettings you can use to set specific colors fo
 
 	$ git config --global color.diff.meta "blue black bold"
 
-You can set the color to any of the following values: normal, black, red, green, yellow, blue, magenta, cyan, or white. If you want an attribute like bold in the previous example, you can choose from bold, dim, ul, blink, and reverse.
+You can set the color to any of the following values: `normal`, `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, or `white`, or, if your terminal supports more than 16 colors, an arbitrary numeric color value (between 0 and 255 on a 256-color terminal). If you want an attribute like bold in the previous example, you can choose from `bold`, `dim`, `ul`, `blink`, and `reverse`.
 
 See the `git config` manpage for all the subsettings you can configure, if you want to do that.
 
@@ -142,7 +142,7 @@ If you want to try this out, P4Merge works on all major platforms, so you should
 
 You can download P4Merge here:
 
-	http://www.perforce.com/perforce/downloads/component.html
+	http://www.perforce.com/product/components/perforce-visual-merge-and-diff-tools
 
 To begin, you’ll set up external wrapper scripts to run your commands. I’ll use the Mac path for the executable; in other systems, it will be where your `p4merge` binary is installed. Set up a merge wrapper script named `extMerge` that calls your binary with all the arguments provided:
 
@@ -178,7 +178,7 @@ or you can edit your `~/.gitconfig` file to add these lines:
 	[merge]
 	  tool = extMerge
 	[mergetool "extMerge"]
-	  cmd = extMerge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+	  cmd = extMerge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	  trustExitCode = false
 	[diff]
 	  external = extDiff
@@ -301,17 +301,21 @@ To tell Git to treat all `pbxproj` files as binary data, add the following line 
 
 	*.pbxproj -crlf -diff
 
-Now, Git won’t try to convert or fix CRLF issues; nor will it try to compute or print a diff for changes in this file when you run git show or git diff on your project. In the 1.6 series of Git, you can also use a macro that is provided that means `-crlf -diff`:
+Now, Git won’t try to convert or fix CRLF issues; nor will it try to compute or print a diff for changes in this file when you run `git show` or `git diff` on your project. You can also use a built-in macro `binary` that means `-crlf -diff`:
 
 	*.pbxproj binary
 
 #### Diffing Binary Files ####
 
-In the 1.6 series of Git, you can use the Git attributes functionality to effectively diff binary files. You do this by telling Git how to convert your binary data to a text format that can be compared via the normal diff.
+In Git, you can use the attributes functionality to effectively diff binary files. You do this by telling Git how to convert your binary data to a text format that can be compared via the normal diff. But the question is how do you convert *binary* data to a text? The best solution is to find some tool that does conversion for your binary format to a text representation. Unfortunately, very few binary formats can be represented as human readable text (imagine trying to convert audio data to a text). If this is the case and you failed to get a text presentation of your file's contents, it's often relatively easy to get a human readable description of that content, or metadata. Metadata won't give you a full representation of your file's content, but in any case it's better than nothing.
+
+We'll make use of the both described approaches to get usable diffs for some widely used binary formats.
+
+Side note: There are different kinds of binary formats with a text content, which are hard to find usable converter for. In such a case you could try to extract a text from your file with the `strings` program. Some of these files may use an UTF-16 encoding or other "codepages" and `strings` won’t find anything useful in there. Your mileage may vary. However, `strings` is available on most Mac and Linux systems, so it may be a good first try to do this with many binary formats.
 
 ##### MS Word files #####
 
-Because this is a pretty cool and not widely known feature, I’ll go over a few examples. First, you’ll use this technique to solve one of the most annoying problems known to humanity: version-controlling Word documents. Everyone knows that Word is the most horrific editor around; but, oddly, everyone uses it. If you want to version-control Word documents, you can stick them in a Git repository and commit every once in a while; but what good does that do? If you run `git diff` normally, you only see something like this:
+First, you’ll use the described technique to solve one of the most annoying problems known to humanity: version-controlling Word documents. Everyone knows that Word is the most horrific editor around; but, oddly, everyone uses it. If you want to version-control Word documents, you can stick them in a Git repository and commit every once in a while; but what good does that do? If you run `git diff` normally, you only see something like this:
 
 	$ git diff
 	diff --git a/chapter1.doc b/chapter1.doc
@@ -322,18 +326,16 @@ You can’t directly compare two versions unless you check them out and scan the
 
 	*.doc diff=word
 
-This tells Git that any file that matches this pattern (.doc) should use the "word" filter when you try to view a diff that contains changes. What is the "word" filter? You have to set it up. Here you’ll configure Git to use the `strings` program to convert Word documents into readable text files, which it will then diff properly:
+This tells Git that any file that matches this pattern (.doc) should use the "word" filter when you try to view a diff that contains changes. What is the "word" filter? You have to set it up. Here you’ll configure Git to use the `catdoc` program, which was written specifically for extracting text from a binary MS Word documents (you can get it from `http://www.wagner.pp.ru/~vitus/software/catdoc/`), to convert Word documents into readable text files, which it will then diff properly:
 
-	$ git config diff.word.textconv strings
+	$ git config diff.word.textconv catdoc
 
 This command adds a section to your `.git/config` that looks like this:
 
 	[diff "word"]
-		textconv = strings
+		textconv = catdoc
 
-Side note: There are different kinds of `.doc` files. Some use an UTF-16 encoding or other "codepages" and `strings` won’t find anything useful in there. Your mileage may vary.
-
-Now Git knows that if it tries to do a diff between two snapshots, and any of the files end in `.doc`, it should run those files through the "word" filter, which is defined as the `strings` program. This effectively makes nice text-based versions of your Word files before attempting to diff them.
+Now Git knows that if it tries to do a diff between two snapshots, and any of the files end in `.doc`, it should run those files through the "word" filter, which is defined as the `catdoc` program. This effectively makes nice text-based versions of your Word files before attempting to diff them.
 
 Here’s an example. I put Chapter 1 of this book into Git, added some text to a paragraph, and saved the document. Then, I ran `git diff` to see what changed:
 
@@ -342,15 +344,14 @@ Here’s an example. I put Chapter 1 of this book into Git, added some text to a
 	index c1c8a0a..b93c9e4 100644
 	--- a/chapter1.doc
 	+++ b/chapter1.doc
-	@@ -8,7 +8,8 @@ re going to cover Version Control Systems (VCS) and Git basics
-	 re going to cover how to get it and set it up for the first time if you don
-	 t already have it on your system.
-	 In Chapter Two we will go over basic Git usage - how to use Git for the 80%
-	-s going on, modify stuff and contribute changes. If the book spontaneously
-	+s going on, modify stuff and contribute changes. If the book spontaneously
-	+Let's see if this works.
+	@@ -128,7 +128,7 @@ and data size)
+	 Since its birth in 2005, Git has evolved and matured to be easy to use
+	 and yet retain these initial qualities. It’s incredibly fast, it’s
+	 very efficient with large projects, and it has an incredible branching
+	-system for non-linear development.
+	+system for non-linear development (See Chapter 3).
 
-Git successfully and succinctly tells me that I added the string "Let’s see if this works", which is correct. It’s not perfect — it adds a bunch of random stuff at the end — but it certainly works. If you can find or write a Word-to-plain-text converter that works well enough, that solution will likely be incredibly effective. However, `strings` is available on most Mac and Linux systems, so it may be a good first try to do this with many binary formats.
+Git successfully and succinctly tells me that I added the string "(See Chapter 3)", which is correct. Works perfectly!
 
 ##### OpenDocument Text files #####
 
@@ -510,7 +511,7 @@ For example, say you have some test files in a `test/` subdirectory, and it does
 
 	test/ export-ignore
 
-Now, when you run git archive to create a tarball of your project, that directory won’t be included in the archive.
+Now, when you run `git archive` to create a tarball of your project, that directory won’t be included in the archive.
 
 #### export-subst ####
 
@@ -534,6 +535,10 @@ This is helpful if a branch in your project has diverged or is specialized, but 
 
 	database.xml merge=ours
 
+And then define a dummy `ours` merge strategy with:
+
+    git config --global merge.ours.driver true
+
 If you merge in the other branch, instead of having merge conflicts with the database.xml file, you see something like this:
 
 	$ git merge topic
@@ -548,7 +553,7 @@ Like many other Version Control Systems, Git has a way to fire off custom script
 
 ### Installing a Hook ###
 
-The hooks are all stored in the `hooks` subdirectory of the Git directory. In most projects, that’s `.git/hooks`. By default, Git populates this directory with a bunch of example scripts, many of which are useful by themselves; but they also document the input values of each script. All the examples are written as shell scripts, with some Perl thrown in, but any properly named executable scripts will work fine — you can write them in Ruby or Python or what have you. For post-1.6 versions of Git, these example hook files end with .sample; you’ll need to rename them. For pre-1.6 versions of Git, the example files are named properly but are not executable.
+The hooks are all stored in the `hooks` subdirectory of the Git directory. In most projects, that’s `.git/hooks`. By default, Git populates this directory with a bunch of example scripts, many of which are useful by themselves; but they also document the input values of each script. All the examples are written as shell scripts, with some Perl thrown in, but any properly named executable scripts will work fine — you can write them in Ruby or Python or what have you. These example hook files end with .sample; you’ll need to rename them.
 
 To enable a hook script, put a file in the `hooks` subdirectory of your Git directory that is named appropriately and is executable. From that point forward, it should be called. I’ll cover most of the major hook filenames here.
 
@@ -612,14 +617,12 @@ All the server-side work will go into the update file in your hooks directory. T
 
 	#!/usr/bin/env ruby
 
-	$refname = ARGV[0]
-	$oldrev  = ARGV[1]
-	$newrev  = ARGV[2]
-	$user    = ENV['USER']
+	refname = ARGV[0]
+	oldrev  = ARGV[1]
+	newrev  = ARGV[2]
+	user    = ENV['USER']
 
-	puts "Enforcing Policies... \n(#{$refname}) (#{$oldrev[0,6]}) (#{$newrev[0,6]})"
-
-Yes, I’m using global variables. Don’t judge me — it’s easier to demonstrate in this manner.
+	puts "Enforcing Policies... \n(#{refname}) (#{oldrev[0,6]}) (#{newrev[0,6]})"
 
 #### Enforcing a Specific Commit-Message Format ####
 
@@ -755,7 +758,7 @@ Now your users can’t push any commits with badly formed messages or with modif
 
 #### Enforcing Fast-Forward-Only Pushes ####
 
-The only thing left is to enforce fast-forward-only pushes. In Git versions 1.6 or newer, you can set the `receive.denyDeletes` and `receive.denyNonFastForwards` settings. But enforcing this with a hook will work in older versions of Git, and you can modify it to do so only for certain users or whatever else you come up with later.
+The only thing left is to enforce fast-forward-only pushes. To do so, you can simply set the `receive.denyDeletes` and `receive.denyNonFastForwards` settings. But enforcing this with a hook will also work, and you can modify it to do so only for certain users or whatever else you come up with later.
 
 The logic for checking this is to see if any commits are reachable from the older revision that aren’t reachable from the newer one. If there are none, then it was a fast-forward push; otherwise, you deny it:
 

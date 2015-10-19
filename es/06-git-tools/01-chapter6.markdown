@@ -59,7 +59,7 @@ Mucha gente se suele preocupar por si, por casualidad, dos objetos en su reposit
 
 Si se da la casualidad de confirmar cambios en un objeto y que a este se le asigne el mismo código SHA-1 que otro ya existente en el repositorio. Al ver  el objeto previamente almacenado en la base de datos, Git asumirá que este ya existía. Al intentar recuperar (check-out) el objeto más tarde, siempre se obtendrán los datos del primer objeto. 
 
-No obstante, hemos de ser conscientes de lo altamente improbable de un suceso así. Los códigos SHA-1 son de 20 bytes, (160 bits). El número de objetos, codificados aleatóriamente, necesarios para asegurar un 50% de probabilidad de darse una sola colisión es cercano a 2^80 (la fórmula para determinar la probabilidad de colisión es `p = (n(n-1)/2) * (1/2^160))`). 2^80 es 1'2 x 10^24, o lo que es lo mismo, 1 billón de billones. Es decir, unas 1.200 veces el número de granos de arena en la Tierra.
+No obstante, hemos de ser conscientes de lo altamente improbable de un suceso así. Los códigos SHA-1 son de 20 bytes, (160 bits). El número de objetos, codificados aleatóriamente, necesarios para asegurar un 50% de probabilidad de darse una sola colisión es cercano a 2^80 (la fórmula para determinar la probabilidad de colisión es `p = (n(n-1)/2) * (1/2^160)`)). 2^80 es 1'2 x 10^24, o lo que es lo mismo, 1 billón de billones. Es decir, unas 1.200 veces el número de granos de arena en la Tierra.
 
 El siguiente ejemplo puede ser bastante ilustrativo, para hacernos una idea de lo que podría tardarse en darse una colisión en el código SHA-1: Si todos los 6'5 billones de humanos en el planeta Tierra estuvieran programando y, cada segundo, cada uno de ellos escribiera código equivalente a todo el histórico del kernel de Linux (cerca de 1 millón de objetos Git), enviandolo todo a un enorme repositorio Git. Serían necesarios unos 5 años antes de que dicho repositorio contuviera suficientes objetos como para tener una probabilidad del 50% de darse una sola colisión en el código SHA-1. Es mucho más probable que todos los miembros de nuestro equipo de programación fuesen atacados y matados por lobos, en incidentes no relacionados entre sí, acaecidos todos ellos en una misma noche.
 
@@ -440,7 +440,7 @@ Con ello, se limpia el área de trabajo:
 
 	$ git status
 	# On branch master
-	nothing to commit (working directory clean)
+	nothing to commit, working directory clean
 
 Y se permite cambiar de rama para ponerse a trabajar en cualquier otra parte. Con la tranquilidad de que los cambios a medio completar están guardados a buen recaudo en la pila de guardado rápido. Para ver el contenido de dicha pila, se emplea el comando 'git stash list':
 
@@ -687,7 +687,7 @@ Es algo que frecuentemente suele ser necesario. Alguien confirma cambios y almac
 	Rewrite 6b9b3cf04e7c5686a9cb838c3f36a8cb6a0fc2bd (21/21)
 	Ref 'refs/heads/master' was rewritten
 
-Esta opción `--tree-filter`, tras cada extracción (checkout) del proyecto, lanzará el comando especificado y reconfirmará los cambios resultantes(recommit). En esta ocasión, se eliminará un archivo llamado passwords.txt de todas y cada una de las instantáneas (snapshot) almacenadas, tanto si este existe como si no. Otro ejemplo: si se desean eliminar todos los archivos de respaldo del editor que han sido almacenados por error, se podría lanzar algo así como  `git filter-branch --tree-filter 'rm -f *~' HEAD`.
+Esta opción `--tree-filter`, tras cada extracción (checkout) del proyecto, lanzará el comando especificado y reconfirmará los cambios resultantes(recommit). En esta ocasión, se eliminará un archivo llamado passwords.txt de todas y cada una de las instantáneas (snapshot) almacenadas, tanto si este existe como si no. Otro ejemplo: si se desean eliminar todos los archivos de respaldo del editor que han sido almacenados por error, se podría lanzar algo así como  `git filter-branch --tree-filter "find * -type f -name '*~' -delete" HEAD`.
 
 Y se iria viendo como Git reescribe árboles y confirmaciones de cambio, hasta que el apuntador de la rama llegue al final. Una recomendación: en general, suele ser buena idea lanzar cualquiera de estas operaciones primero sobre una rama de pruebas y luego reinicializar (hard-reset) la rama maestra (master), una vez se haya comprobado que el resultado de las operaciones es el esperado. Si se desea lanzar `filter-branch` sobre todas las ramas del repositorio, se ha de pasar la opción `--all` al comando. 
 

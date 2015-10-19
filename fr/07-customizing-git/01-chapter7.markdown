@@ -113,7 +113,6 @@ Fixez-le simplement sur le chemin du fichier qui contient les informations simil
 
 #### help.autocorrect ####
 
-Cette option n'est disponible qu'à partir de la version 1.6.1.
 Si vous avez fait une faute de frappe en tapant une commande dans Git 1.6, il vous affichera une liste de commandes ressemblantes :
 
 	$ git com
@@ -143,7 +142,7 @@ Ce réglage a été ajouté dans Git 1.5.5.
 Si vous avez une version antérieure, vous devrez spécifier les règles de colorisation individuellement.
 
 `color.ui = always` est rarement utile.
-Dans les plupart des cas, si vous tenez vraiment à coloriser vos sorties redirigées, vous pourrez passer le drapeau `--color` à la commande Git pour la forcer à utiliser les codes de couleur.
+Dans la plupart des cas, si vous tenez vraiment à coloriser vos sorties redirigées, vous pourrez passer le drapeau `--color` à la commande Git pour la forcer à utiliser les codes de couleur.
 Le réglage `color.ui = true` est donc le plus utilisé.
 
 #### `color.*` ####
@@ -164,7 +163,7 @@ Par exemple, pour régler les couleurs de méta-informations du diff avec une é
 La couleur peut prendre les valeurs suivantes : *normal*, *black*, *red*, *green*, *yellow*, *blue*, *magenta*, *cyan* ou *white*.
 Si vous souhaitez ajouter un attribut de casse, les valeurs disponibles sont *bold* (gras), *dim* (léger), *ul* (*underlined*, souligné), *blink* (clignotant) et *reverse* (inversé).
 
-Référez-vous à la page de manuel de `git config` pour tous les sous-réglages disponibles.
+Référez-vous à la page du manuel de `git config` pour tous les sous-réglages disponibles.
 
 ### Outils externes de fusion et de différence ###
 
@@ -178,7 +177,7 @@ Pour Windows, vous devrez changer `/usr/local/bin` en un chemin d'exécution d'u
 
 Vous pouvez télécharger P4Merge ici :
 
-	http://www.perforce.com/perforce/downloads/component.html
+	http://www.perforce.com/product/components/perforce-visual-merge-and-diff-tools
 
 Pour commencer, créez un script d'appel externe pour lancer vos commandes.
 Je vais utiliser le chemin Mac pour l'exécutable ; dans d'autres systèmes, il résidera où votre binaire `p4merge` a été installé.
@@ -219,7 +218,7 @@ ou vous pouvez éditer votre fichier `~/.gitconfig` pour y ajouter ces lignes :
 	[merge]
 	  tool = extMerge
 	[mergetool "extMerge"]
-	  cmd = extMerge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+	  cmd = extMerge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	  trustExitCode = false
 	[diff]
 	  external = extDiff
@@ -295,7 +294,7 @@ Les deux autres qui sont désactivées par défaut mais peuvent être activées 
 
 Vous pouvez indiquer à Git quelle correction vous voulez activer en fixant `core.whitespace` avec les valeurs que vous voulez ou non, séparées par des virgules.
 Vous pouvez désactiver des réglages en les éliminant de la chaîne de paramétrage ou en les préfixant avec un `-`.
-Par exemple, si vous souhaiter activer tout sauf `cr-at-eol`, vous pouvez lancer ceci :
+Par exemple, si vous souhaitez activer tout sauf `cr-at-eol`, vous pouvez lancer ceci :
 
 	$ git config --global core.whitespace \
 	    trailing-space,space-before-tab,indent-with-non-tab
@@ -386,12 +385,23 @@ Dans la branche 1.6 de Git, vous pouvez aussi utiliser une macro fournie qui sig
 
 #### Comparaison de fichiers binaires ####
 
-Dans la branche 1.6 de Git, vous pouvez utiliser la fonctionnalité des attributs Git pour effectivement comparer les fichiers binaires.
+Dans Git, vous pouvez utiliser la fonctionnalité des attributs pour comparer efficacement les fichiers binaires.
 Pour ce faire, indiquez à Git comment convertir vos données binaires en format texte qui peut être comparé via un diff normal.
+Mais le question revient alors à savoir comment convertir les données binaires en texte.
+La meilleure solution consiste à trouver un outil qui réalise pour vous la conversion des données binaires en représentation textuelle (imaginez par exemple comment convertir un fichier audio en texte).
+Si c'est impossible et qur vous ne parvenez pas à obtenir une réprésentation du contenu sous forme de texte, il reste relativement facile d'obtenir une description dans un format humainement lisible de ce contenu.
+Les métadonnées ne vous donneront pas une représentation complète du contenu du fichier, mais c'est en tout cas mieux que rien.
+
+Nous allons utiliser les deux méthodes précédentes pour obtenir des comparaisons de formats binaires largement utilisés.
+
+Note : il existe de nombreux types de formats binaires avec du contenu textuel pour lesquels il est difficile de trouver une convertisseur vers du texte.
+Dans ces cas, il reste toujours possible d'extraire le texte au moyen du programme `strings`.
+Certains de ces fichiers peuvent aussi utiliser une encodage spécifique du texte, comme UTF-16, et `strings` ne trouvera alors rien de probant.
+Les résultats sont très variables.
+Dans tous les cas, `strings` est disponible sur la plupart des systèmes Mac et Linux, et constitue une bonne option pour un premier essai. 
 
 ##### Fichiers MS Word #####
 
-Comme c'est une fonctionnalité plutôt cool et peu connue, nous allons en voir quelques exemples.
 Premièrement, nous utiliserons cette technique pour résoudre un des problèmes les plus ennuyeux de l'humanité : gérer en contrôle de version les documents Word.
 Tout le monde convient que Word est l'éditeur de texte le plus horrible qui existe, mais bizarrement, tout le monde persiste à l'utiliser.
 Si vous voulez gérer en version des documents Word, vous pouvez les coller dans un dépôt Git et les valider de temps à autre.
@@ -412,20 +422,17 @@ Ajoutez la ligne suivante dans votre fichier `.gitattributes` :
 Cette ligne indique à Git que tout fichier correspondant au patron (.doc) doit utiliser le filtre `word` pour visualiser le diff des modifications.
 Qu'est-ce que le filtre « word » ?
 Nous devons le définir.
-Vous allez configurer Git à utiliser le programme `strings` pour convertir les documents Word en fichiers texte lisibles qu'il pourra alors comparer correctement :
+Vous allez indiquer à Git d'utiliser le programme `catdoc` qui a été écrit spécifiquement pour extraire le texte d'un document MS Word.
+Vous pouvez l'obtenir depuis `http://www.wagner.pp.ru/~vitus/software/catdoc`.
 
-	$ git config diff.word.textconv strings
+	$ git config diff.word.textconv catdoc
 
 Cette commande ajoute à votre fichier `.git/config` une section qui ressemble à ceci :
 
 	[diff "word"]
-	  textconv = strings
+	  textconv = catdoc
 
-Note : il existe différents types de fichiers `.doc`.
-Certains utilisent un codage UTF-16 ou d'autres pages de codes plus exotiques dans lesquels `strings` ne trouvera aucune chaîne utile.
-Le résultat de ce filtre pour vos fichiers dépendra de ces conditions.
-
-À présent, Git sait que s'il essaie de faire un diff entre deux instantanés et qu'un des fichiers finit en `.doc`, il devrait faire passer ces fichiers par le filtre `word` défini comme le programme `strings`.
+À présent, Git sait que s'il essaie de faire un diff entre deux instantanés et qu'un des fichiers finit en `.doc`, il devrait faire passer ces fichiers par le filtre `word` défini comme le programme `catdoc`.
 Cette méthode fait effectivement des jolies versions texte de vos fichiers Word avant d'essayer de les comparer.
 
 Voici un exemple.
@@ -437,18 +444,14 @@ Puis, j'ai lancé `git diff` pour visualiser ce qui a changé :
 	index c1c8a0a..b93c9e4 100644
 	--- a/chapter1.doc
 	+++ b/chapter1.doc
-	@@ -8,7 +8,8 @@ re going to cover Version Control Systems (VCS) and Git basics
-	 re going to cover how to get it and set it up for the first time if you don
-	 t already have it on your system.
-	 In Chapter Two we will go over basic Git usage - how to use Git for the 80%
-	-s going on, modify stuff and contribute changes. If the book spontaneously
-	+s going on, modify stuff and contribute changes. If the book spontaneously
-	+Let's see if this works.
+	@@ -128,7 +128,7 @@ and data size)
+	 Since its birth in 2005, Git has evolved and matured to be easy to use
+	 and yet retain these initial qualities. It’s incredibly fast, it’s
+	 very efficient with large projects, and it has an incredible branching
+	-system for non-linear development.
+	+system for non-linear development (See Chapter 3).
 
-Git réussit à m'indiquer succinctement que j'ai ajouté la chaîne « *Let's see if this works* », ce qui est correct.
-Ce n'est pas parfait car il y a toujours un tas de données aléatoires à la fin, mais c'est suffisant.
-Si vous êtes capable d'écrire un convertisseur Word vers texte qui fonctionne suffisamment bien, cette solution peut s'avérer très efficace.
-Cependant, `strings` est disponible sur la plupart des systèmes Mac et Linux et peut donc constituer un bon début pour de nombreux formats binaires.
+Git m'indique succinctement que j'ai ajouté la chaîne « (see Chapter 3) », ce qui est correct.
 
 ##### Fichiers OpenDocument texte #####
 
@@ -521,7 +524,7 @@ Si vous remplacez une image dans votre projet et lancez `git diff`, vous verrez 
 	@@ -1,12 +1,12 @@
 	 ExifTool Version Number         : 7.74
 	-File Size                       : 70 kB
-	-File Modification Date/Time     : 2009:04:21 07:02:45-07:00
+	-File Modification Date/Time     : 2009:04:17 10:12:35-07:00
 	+File Size                       : 94 kB
 	+File Modification Date/Time     : 2009:04:21 07:02:43-07:00
 	 File Type                       : PNG
@@ -750,7 +753,7 @@ Vous ne pouvez plus arrêter le processus de validation avec ce script.
 
 #### Autres crochets côté client ####
 
-Le crochet `pre-rebase` est invoqueé avant que vous ne rebasiez et peut interrompre le processus s'il sort avec un code d'erreur non nul.
+Le crochet `pre-rebase` est invoqué avant que vous ne rebasiez et peut interrompre le processus s'il sort avec un code d'erreur non nul.
 Vous pouvez utiliser ce crochet pour empêcher de rebaser tout *commit* qui a déjà été poussé.
 C'est ce que fait le crochet d'exemple `pre-rebase` que Git installe, même s'il considère que la branche cible de publication s'appelle `next`.
 Il est très probable que vous ayez à changer ce nom pour celui que vous utilisez réellement en branche publique stable.
@@ -761,7 +764,7 @@ Cela peut signifier y déplacer des gros fichiers binaires que vous ne souhaitez
 
 Enfin, le crochet `post-merge` s'exécute à la suite d'une commande `merge` réussie.
 Vous pouvez l'utiliser pour restaurer certaines données non gérées par Git dans le copie de travail telles que les informations de permission.
-Ce crochet permet de même de valider la présence de fichiers externes au contrôle de Git que vous souhaitez voir recopiés lorsque la copie de travail change.
+Ce crochet permet même de valider la présence de fichiers externes au contrôle de Git que vous souhaitez voir recopiés lorsque la copie de travail change.
 
 ### Crochets côté serveur ###
 

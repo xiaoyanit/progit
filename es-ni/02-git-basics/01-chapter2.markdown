@@ -55,7 +55,7 @@ La herramienta principal que se utiliza para determinar qué archivos están en 
 
 	$ git status
 	# On branch master
-	nothing to commit (working directory clean)
+	nothing to commit, working directory clean
 
 Esto significa que tienes una copia de trabajo limpia, en otras palabras, que no hay ningún archivo versionado que haya sido modificado. Git tampoco detectó ningún archivo sin versionar, de otra manera debería estar listado aquí. Por último, el comando indica en qué branch estás trabajando. Por ahora, siempre será master, que es el branch por defecto; no hace falta que te preocupes por saber qué significa en este punto aún. En el próximo capítulo analizaremos los branches y referencias en detalle.
 
@@ -173,11 +173,16 @@ Los patrones globales son expresiones regulares simplificadas que pueden ser uti
 Aquí hay otro ejemplo de un archivo .gitignore:
 
 	# un comentario - es ignorado
-	*.a       # ningún archivo .a
-	!lib.a    # pero si queremos versionar el archivo lib.a, incluse aunque estemos ignorando los archivos .a más arriba
-	/TODO     # solo ignorar el archivo TODO del directorio raíz, no de los subdirectorios
-	build/    # ignorar todos los archivos dentro del directorio build/
-	doc/*.txt # ignorar el archivo doc/notes.txt, pero no doc/server/arch.txt
+	# ningún archivo .a
+	*.a
+	# pero si queremos versionar el archivo lib.a, incluse aunque estemos ignorando los archivos .a más arriba
+	!lib.a
+	# solo ignorar el archivo TODO del directorio raíz, no de los subdirectorios
+	/TODO
+	# ignorar todos los archivos dentro del directorio build/
+	build/
+	# ignorar el archivo doc/notes.txt, pero no doc/server/arch.txt
+	doc/*.txt
 
 ### Visualizando Archivos Versionados y No Versionados ###
 

@@ -80,8 +80,8 @@ L'outil principal pour déterminer quels fichiers sont dans quel état est la co
 Si vous lancez cette commande juste après un clonage, vous devriez voir ce qui suit :
 
 	$ git status
-	# On branch master
-	nothing to commit (working directory clean)
+	On branch master
+	nothing to commit, working directory clean
 
 Ce message signifie que votre copie de travail est propre, en d'autres mots, aucun fichier suivi n'a été modifié.
 Git ne voit pas non plus de fichiers non-suivis, sinon ils seraient listés ici.
@@ -94,11 +94,12 @@ Si ce fichier n'existait pas auparavant, et que vous lancez la commande `git sta
 
 	$ vim LISEZMOI
 	$ git status
-	# On branch master
-	# Untracked files:
-	#   (use "git add <file>..." to include in what will be committed)
-	#
-	#	LISEZMOI
+	On branch master
+	Untracked files:
+	  (use "git add <file>..." to include in what will be committed)
+
+	        LISEZMOI
+
 	nothing added to commit but untracked files present (use "git add" to track)
 
 Vous pouvez constater que votre nouveau fichier `LISEZMOI` n'est pas en suivi de version, car il apparaît dans la section « Untracked files » de l'état de la copie de travail.
@@ -116,12 +117,12 @@ Pour commencer à suivre le fichier `LISEZMOI`, vous pouvez entrer ceci :
 Si vous lancez à nouveau la commande `git status`, vous pouvez constater que votre fichier `LISEZMOI` est maintenant suivi et indexé :
 
 	$ git status
-	# On branch master
-	# Changes to be committed:
-	#   (use "git reset HEAD <file>..." to unstage)
-	#
-	#	new file:   LISEZMOI
-	#
+	On branch master
+	Changes to be committed:
+	  (use "git reset HEAD <file>..." to unstage)
+
+	        new file:   LISEZMOI
+
 
 Vous pouvez affirmer qu'il est indexé car il apparaît dans la section « Changes to be committed » (Modifications à valider).
 Si vous enregistrez à ce moment, la version du fichier à l'instant où vous lancez `git add` est celle qui appartiendra à l'instantané.
@@ -134,17 +135,18 @@ Maintenant, modifions un fichier qui est déjà sous suivi de version.
 Si vous modifiez le fichier sous suivi de version appelé `benchmarks.rb` et que vous lancez à nouveau votre commande `git status`, vous verrez ceci :
 
 	$ git status
-	# On branch master
-	# Changes to be committed:
-	#   (use "git reset HEAD <file>..." to unstage)
-	#
-	#	new file:   LISEZMOI
-	#
-	# Changes not staged for commit:
-	#   (use "git add <file>..." to update what will be committed)
-	#
-	#	modified:   benchmarks.rb
-	#
+	On branch master
+	Changes to be committed:
+	  (use "git reset HEAD <file>..." to unstage)
+
+	        new file:   LISEZMOI
+
+	Changes not staged for commit:
+	  (use "git add <file>..." to update what will be committed)
+	  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	        modified:   benchmarks.rb
+
 
 Le fichier `benchmarks.rb` apparaît sous la section nommée « Changes not staged for commit » ce qui signifie que le fichier sous suivi de version a été modifié dans la copie de travail mais n'est pas encore indexé.
 Pour l'indexer, il faut lancer la commande `git add` (qui est une commande multi-usage — elle peut être utilisée pour placer un fichier sous suivi de version, pour indexer un fichier ou pour d'autres actions telles que marquer comme résolus des conflits de fusion de fichiers).
@@ -152,13 +154,13 @@ Lançons maintenant `git add` pour indexer le fichier `benchmarks.rb`, et relan�
 
 	$ git add benchmarks.rb
 	$ git status
-	# On branch master
-	# Changes to be committed:
-	#   (use "git reset HEAD <file>..." to unstage)
-	#
-	#	new file:   LISEZMOI
-	#	modified:   benchmarks.rb
-	#
+	On branch master
+	Changes to be committed:
+	  (use "git reset HEAD <file>..." to unstage)
+
+	        new file:   LISEZMOI
+	        modified:   benchmarks.rb
+
 
 À présent, les deux fichiers sont indexés et feront partie de la prochaine validation.
 Mais supposons que vous souhaitiez apporter encore une petite modification au fichier `benchmarks.rb` avant de réellement valider la nouvelle version.
@@ -167,18 +169,19 @@ Néanmoins, vous lancez `git status` une dernière fois :
 
 	$ vim benchmarks.rb
 	$ git status
-	# On branch master
-	# Changes to be committed:
-	#   (use "git reset HEAD <file>..." to unstage)
-	#
-	#	new file:   LISEZMOI
-	#	modified:   benchmarks.rb
-	#
-	# Changes not staged for commit:
-	#   (use "git add <file>..." to update what will be committed)
-	#
-	#	modified:   benchmarks.rb
-	#
+	On branch master
+	Changes to be committed:
+	  (use "git reset HEAD <file>..." to unstage)
+
+	        new file:   LISEZMOI
+	        modified:   benchmarks.rb
+
+	Changes not staged for commit:
+	  (use "git add <file>..." to update what will be committed)
+	  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	        modified:   benchmarks.rb
+
 
 Que s'est-il donc passé ? À présent, `benchmarks.rb` apparaît à la fois comme indexé et non indexé.
 En fait, Git indexe un fichier dans son état au moment où la commande `git add` est lancée.
@@ -187,13 +190,13 @@ Si le fichier est modifié après un `git add`, il faut relancer `git add` pour 
 
 	$ git add benchmarks.rb
 	$ git status
-	# On branch master
-	# Changes to be committed:
-	#   (use "git reset HEAD <file>..." to unstage)
-	#
-	#	new file:   LISEZMOI
-	#	modified:   benchmarks.rb
-	#
+	On branch master
+	Changes to be committed:
+	  (use "git reset HEAD <file>..." to unstage)
+
+	        new file:   LISEZMOI
+	        modified:   benchmarks.rb
+
 
 ### Ignorer des fichiers ###
 
@@ -224,11 +227,20 @@ Un astérisque (`*`) correspond à un ou plusieurs caractères ; `[abc]` corres
 Voici un autre exemple de fichier `.gitignore` :
 
 	# un commentaire, cette ligne est ignorée
-	*.a       # pas de fichier .a
-	!lib.a    # mais suivre lib.a malgré la règle précédente
-	/TODO     # ignorer uniquement le fichier TODO à la racine du projet
-	build/    # ignorer tous les fichiers dans le répertoire build
-	doc/*.txt # ignorer doc/notes.txt, mais pas doc/server/arch.txt
+	# pas de fichier .a
+	*.a
+	# mais suivre lib.a malgré la règle précédente
+	!lib.a
+	# ignorer uniquement le fichier TODO à la racine du projet
+	/TODO
+	# ignorer tous les fichiers dans le répertoire build
+	build/
+	# ignorer doc/notes.txt, mais pas doc/server/arch.txt
+	doc/*.txt
+	# ignorer tous les fichiers .txt sous le répertoire doc/
+	doc/**/*.txt
+
+Le patron `**/` est disponible dans Git depuis la version 1.8.2.
 
 ### Inspecter les modifications indexées et non indexées ###
 
@@ -239,17 +251,18 @@ Supposons que vous éditez et indexez le fichier `LISEZMOI` et que vous éditez 
 Si vous lancez la commande `git status`, vous verrez ceci :
 
 	$ git status
-	# On branch master
-	# Changes to be committed:
-	#   (use "git reset HEAD <file>..." to unstage)
-	#
-	#	new file:   LISEZMOI
-	#
-	# Changes not staged for commit:
-	#   (use "git add <file>..." to update what will be committed)
-	#
-	#	modified:   benchmarks.rb
-	#
+	On branch master
+	Changes to be committed:
+	  (use "git reset HEAD <file>..." to unstage)
+
+	        new file:   LISEZMOI
+
+	Changes not staged for commit:
+	  (use "git add <file>..." to update what will be committed)
+	  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	        modified:   benchmarks.rb
+
 
 Pour visualiser ce qui a été modifié mais pas encore indexé, tapez `git diff` sans autre argument :
 
@@ -441,7 +454,7 @@ Si vous avez auparavant modifié et indexé le fichier, son élimination doit ê
 C'est une mesure de sécurité pour empêcher un effacement accidentel de données qui n'ont pas encore été enregistrées dans un instantané et qui seraient définitivement perdues.
 
 Un autre scénario serait de vouloir abandonner le suivi de version d'un fichier tout en le conservant dans la copie de travail.
-Ceci est particulièrement utile lorsqu'on a oublié de spécifier un patron dans le fichier `.gitignore` et on a accidentellement ajouté un fichier dans l'instantané, tel qu'un gros fichier de journal ou une série d'archives de compilation `.a`.
+Ceci est particulièrement utile lorsqu'on a oublié de spécifier un patron dans le fichier `.gitignore` et on a accidentellement indexé un fichier, tel qu'un gros fichier de journal ou une série d'archives de compilation `.a`.
 Pour réaliser ce scénario, utilisez l'option `--cached` :
 
 	$ git rm --cached readme.txt
@@ -547,11 +560,13 @@ Vous pouvez aussi utiliser `-2` qui limite la sortie de la commande aux deux ent
 	index a874b73..8f94139 100644
 	--- a/Rakefile
 	+++ b/Rakefile
-	@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
+	@@ -5,5 +5,5 @@ require 'rake/gempackagetask'
 	 spec = Gem::Specification.new do |s|
+	     s.name      =   "simplegit"
 	-    s.version   =   "0.1.0"
 	+    s.version   =   "0.1.1"
 	     s.author    =   "Scott Chacon"
+	     s.email     =   "schacon@gee-mail.com
 
 	commit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7
 	Author: Scott Chacon <schacon@gee-mail.com>
@@ -576,6 +591,32 @@ Vous pouvez aussi utiliser `-2` qui limite la sortie de la commande aux deux ent
 
 Cette option affiche la même information mais avec un diff suivant directement chaque entrée.
 C'est très utile pour des revues de code ou pour naviguer rapidement à travers l'historique des modifications qu'un collaborateur a apportées.
+
+Quelques fois, il est plus facile de visualiser les modifications au niveau des mots plutôt qu'au niveau des lignes.
+L'option `--word-diff` ajoutée à la commande `git log -p` modifie l'affichage des différences en indiquant les modifications au sein des lignes.
+Le format de différence sur les mots est généralement peu utile pour les fichiers de code source, mais s'avère particulièrement pertinent pour les grands fichiers de texte, tels que des livres ou des dissertations. En voici un exemple :
+
+	$ git log -U1 --word-diff
+	commit ca82a6dff817ec66f44342007202690a93763949
+	Author: Scott Chacon <schacon@gee-mail.com>
+	Date:   Mon Mar 17 21:52:11 2008 -0700
+
+	    changed the version number
+
+	diff --git a/Rakefile b/Rakefile
+	index a874b73..8f94139 100644
+	--- a/Rakefile
+	+++ b/Rakefile
+	@@ -7,3 +7,3 @@ spec = Gem::Specification.new do |s|
+	    s.name      =   "simplegit"
+	    s.version   =   [-"0.1.0"-]{+"0.1.1"+}
+	    s.author    =   "Scott Chacon"
+
+Comme vous le voyez, les indications de lignes ajoutées ou retirées d'un *diff* normal ont disparu.
+Les modifications sont affichées en ligne.
+Les mots ajoutés sont encadrés par `{+ +}` tandis que les mots effacés sont encadrés par `[- -]`.
+Vous souhaiterez sûrement réduire le contexte habituel de trois lignes à seulement une ligne, du fait qu'il est à présent constitué de mots et non de lignes.
+Cela est réalisé avec l'option `-U1` utilisée dans l'exemple précédent.
 
 Vous pouvez aussi utiliser une liste d'options de résumé avec `git log`.
 Par exemple, si vous souhaitez visualiser des statistiques résumées pour chaque *commit*, vous pouvez utiliser l'option `--stat` :
@@ -635,7 +676,7 @@ Le tableau 2-1 liste les options de formatage les plus utiles.
 
 	Option	Description du formatage
 	%H	Somme de contrôle du commit
-	%h	Somme de contrôle abrégée du *commit*
+	%h	Somme de contrôle abrégée du commit
 	%T	Somme de contrôle de l'arborescence
 	%t	Somme de contrôle abrégée de l'arborescence
 	%P	Sommes de contrôle des parents
@@ -674,15 +715,16 @@ Les options ci-dessus ne sont que des options simples de format de sortie de `gi
 Le tableau 2-2 donne une liste des options que nous avons traitées ainsi que d'autres options communément utilisées accompagnées de la manière dont elles modifient le résultat de la commande `log`.
 
 	Option	Description
-	-p	Affiche le patch appliqué par chaque *commit*
-	--stat	Affiche les statistiques de chaque fichier pour chaque *commit*
+	-p	Affiche le patch appliqué par chaque commit
+	--stat	Affiche les statistiques de chaque fichier pour chaque commit
 	--shortstat	N'affiche que les ligne modifiées/insérées/effacées de l'option --stat
-	--name-only	Affiche la liste des fichiers modifiés après les informations du *commit*
+	--name-only	Affiche la liste des fichiers modifiés après les informations du commit
 	--name-status	Affiche la liste des fichiers affectés accompagnés des informations d'ajout/modification/suppression
 	--abbrev-commit	N'affiche que les premiers caractères de la somme de contrôle SHA-1
 	--relative-date	Affiche la date en format relatif (par exemple "2 weeks ago" : il y a deux semaines) au lieu du format de date complet
 	--graph	Affiche en caractères ASCII le graphe de branches et fusions en vis-à-vis de l'historique
 	--pretty=<format>	Affiche les *commits* dans un format alternatif. Les formats incluent `oneline`, `short`, `full`, `fuller`, et `format` (où on peut spécifier son propre format)
+	--oneline	Option de convenance correspondant à `--pretty=oneline --abbrev-commit`
 
 ### Limiter la longueur de l'historique ###
 
@@ -700,7 +742,9 @@ Cette commande fonctionne avec de nombreux formats — vous pouvez indiquer une
 
 Vous pouvez aussi restreindre la liste aux *commits* vérifiant certains critères de recherche.
 L'option `--author` permet de filtrer sur un auteur spécifique, et l'option `--grep` permet de chercher des mots clés dans les messages de validation.
-Notez que si vous cherchez seulement des *commits* correspondant simultanément aux deux critères, vous devez ajouter l'option `--all-match`, car par défaut ces commandes retournent les *commits* vérifiant au moins un critère lors de recherche.
+Notez que si vous spécifiez à la fois `--author` et `--grep`, la commande retournera seulement des *commits* correspondant simultanément aux deux critères.
+
+Si vous souhaitez spécifier plusieurs options `--grep`,  vous devez ajouter l'option `--all-match`, car par défaut ces commandes retournent les *commits* vérifiant au moins un critère de recherche.
 
 La dernière option vraiment utile à `git log` est la spécification d'un chemin.
 Si un répertoire ou un nom de fichier est spécifié, le journal est limité aux *commits* qui ont introduit des modifications aux fichiers concernés.
@@ -886,7 +930,7 @@ Par exemple, mon dépôt Grit ressemble à ceci.
 	koke      git://github.com/koke/grit.git
 	origin    git@github.com:mojombo/grit.git
 
-Cela signifie que nous pouvons tirer très facilement des contributions depuis certains utilisateurs.
+Cela signifie que je peux tirer très facilement des contributions depuis certains utilisateurs.
 Mais il est à noter que seul le dépôt distant `origin` utilise une URL SSH, ce qui signifie que c'est le seul sur lequel je peux pousser (nous traiterons de ceci au chapitre 4).
 
 ### Ajouter des dépôts distants ###
@@ -962,7 +1006,7 @@ Si vous lancez cette commande avec un nom court particulier, tel que `origin`, v
 	    ticgit
 
 
-Cela donne le liste des URL pour le dépôt distant ainsi que la liste des branches distantes suivies.
+Cela donne la liste des URL pour le dépôt distant ainsi que la liste des branches distantes suivies.
 Cette commande vous informe que si vous êtes sur la branche `master` et si vous lancez `git pull`, il va automatiquement fusionner la branche `master` du dépôt distant après avoir récupéré toutes les références sur le serveur distant.
 Cela donne aussi la liste des autres références qu'il aura tirées.
 
@@ -1251,9 +1295,8 @@ De nombreuses personnes utilisent parfaitement Git sans connaître aucun de ces 
 ### Auto-Complétion ###
 
 Si vous utilisez le shell Bash, Git est livré avec un script d'auto-complétion utile.
-Téléchargez le code source de Git, et jetez un œil dans le répertoire `contrib/completion`.
-Il devrait y avoir un fichier nommé `git-completion.bash`.
-Copiez ce fichier dans votre répertoire personnel et ajoutez cette ligne à votre fichier `.bashrc` :
+Téléchargez le directement depuis le code source de Git à https://github.com/git/git/blob/master/contrib/git-completion.bash .
+Copiez ce fichier dans votre répertoire personnel sous le nom `.git-completion.bash` et ajoutez cette ligne à votre fichier `.bashrc` :
 
 	source ~/.git-completion.bash
 

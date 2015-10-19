@@ -55,7 +55,7 @@ Insert 18333fig0201.png
 
 	$ git status
 	# On branch master
-	nothing to commit (working directory clean)
+	nothing to commit, working directory clean
 
 ผลลัพธ์ด้านบนหมายความว่าไดเรกทอรีของคุณยังสะอาดอยู่ นั่นก็คือไม่มีการแก้ไขแฟ้มที่ถูก track และ ไม่มีแฟ้มที่อยู่ในสถานะ untracked ในไดเรกทอรี นอกจากนั้นคำสั่งนี้ยังบอกว่าคุณอยู่ใน branch ชื่อ master ซึ่งเป็น branch เริ่มต้นอยู่แล้ว เราจะลงรายละเอียดเกี่ยวกับ branch และ reference ในบทถัดไป
 
@@ -170,11 +170,16 @@ Glob patterns are like simplified regular expressions that shells use. An asteri
 Here is another example .gitignore file:
 
 	# a comment – this is ignored
-	*.a       # no .a files
-	!lib.a    # but do track lib.a, even though you're ignoring .a files above
-	/TODO     # only ignore the root TODO file, not subdir/TODO
-	build/    # ignore all files in the build/ directory
-	doc/*.txt # ignore doc/notes.txt, but not doc/server/arch.txt
+	# no .a files
+	*.a
+	# but do track lib.a, even though you're ignoring .a files above
+	!lib.a
+	# only ignore the root TODO file, not subdir/TODO
+	/TODO
+	# ignore all files in the build/ directory
+	build/
+	# ignore doc/notes.txt, but not doc/server/arch.txt
+	doc/*.txt
 
 ### Viewing Your Staged and Unstaged Changes ###
 

@@ -43,12 +43,12 @@ Après, il suffit d'envoyer une demande au mainteneur de projet pour qu'il tire 
 Il peut ajouter votre dépôt comme dépôt distant, tester vos modifications localement, les fusionner dans sa branche et les pousser vers le dépôt public.
 Le processus se passe comme ceci (voir figure 5-2) :
 
-1.      Le mainteneur du projet pousse vers son dépôt public.
-2.      Un contributeur clone ce dépôt et introduit des modifications.
-3.      Le contributeur pousse son travail sur son dépôt public.
-4.      Le contributeur envoie au mainteneur un e-mail de demande pour tirer depuis son dépôt.
-5.      Le mainteneur ajoute le dépôt du contributeur comme dépôt distant et fusionne localement.
-6.      Le mainteneur pousse les modifications fusionnées sur le dépôt principal.
+1. Le mainteneur du projet pousse vers son dépôt public.
+2. Un contributeur clone ce dépôt et introduit des modifications.
+3. Le contributeur pousse son travail sur son dépôt public.
+4. Le contributeur envoie au mainteneur un e-mail de demande pour tirer depuis son dépôt.
+5. Le mainteneur ajoute le dépôt du contributeur comme dépôt distant et fusionne localement.
+6. Le mainteneur pousse les modifications fusionnées sur le dépôt principal.
 
 Insert 18333fig0502.png
 Figure 5-2. Le mode du gestionnaire d'intégration.
@@ -69,10 +69,10 @@ Tous les lieutenants ont un unique gestionnaire d'intégration, le dictateur bie
 Le dépôt du dictateur sert de dépôt de référence à partir duquel tous les collaborateurs doivent tirer.
 Le processus se déroule comme suit (voir figure 5-3) :
 
-1.      Les développeurs de base travaillent sur la branche thématique et rebasent leur travail sur master. La branche `master` est celle du dictateur.
-2.      Les lieutenants fusionnent les branches thématiques des développeurs dans leur propre branche `master`.
-3.      Le dictateur fusionne les branches master de ses lieutenants dans sa propre branche `master`.
-4.      Le dictateur pousse sa branche `master` sur le dépôt de référence pour que les développeurs se rebasent dessus.
+1. Les développeurs de base travaillent sur la branche thématique et rebasent leur travail sur master. La branche `master` est celle du dictateur.
+2. Les lieutenants fusionnent les branches thématiques des développeurs dans leur propre branche `master`.
+3. Le dictateur fusionne les branches master de ses lieutenants dans sa propre branche `master`.
+4. Le dictateur pousse sa branche `master` sur le dépôt de référence pour que les développeurs se rebasent dessus.
 
 Insert 18333fig0503.png
 Figure 5-3. Le processus du dictateur bienveillant.
@@ -148,7 +148,7 @@ Le dernier point à soigner est le message de validation.
 S'habituer à écrire des messages de validation de qualité facilite grandement l'emploi et la collaboration avec Git.
 En règle générale, les messages doivent débuter par une ligne unique d'au plus 50 caractères décrivant concisément la modification, suivie d'une ligne vide, suivie d'une explication plus détaillée.
 Le projet Git exige que l'explication détaillée inclue la motivation de la modification en contrastant le nouveau comportement par rapport à l'ancien — c'est une bonne règle de rédaction.
-Un bonne règle consiste aussi à utiliser le présent de l'impératif ou des verbes substantivés dans le message.
+Une bonne règle consiste aussi à utiliser le présent de l'impératif ou des verbes substantivés dans le message.
 En d'autres termes, utilisez des ordres.
 Au lieu d'écrire « J'ai ajouté des tests pour » ou « En train d'ajouter des tests pour », utilisez juste « Ajoute des tests pour » ou « Ajout de tests pour ».
 
@@ -255,7 +255,7 @@ John a une référence aux modifications que Jessica a poussées, mais il doit l
 Cette fusion se passe sans problème — l'historique de *commits* de John ressemble à présent à la figure 5-5.
 
 Insert 18333fig0505.png
-Figure 5-5. Le dépôt local de John après la fusion d'origin/master.
+Figure 5-5. Le dépôt local de John après la fusion d'`origin/master`.
 
 Maintenant, John peut tester son code pour s'assurer qu'il fonctionne encore correctement et peut pousser son travail nouvellement fusionné sur le serveur :
 
@@ -658,7 +658,7 @@ Le contenu des fichiers ressemble à ceci :
 	1.6.2.rc1.20.g8c5b.dirty
 
 Vous pouvez maintenant éditer ces fichiers de patch pour ajouter plus d'informations à destination de la liste de diffusion mais que vous ne souhaitez pas voir apparaître dans le message de validation.
-Si vous ajoutez du texte entre la ligne `--` et le début du patch (la ligne `lib/simplegit.rb`), les développeurs peuvent le lire mais l'application du patch ne le prend pas en compte.
+Si vous ajoutez du texte entre la ligne `---` et le début du patch (la ligne `lib/simplegit.rb`), les développeurs peuvent le lire mais l'application du patch ne le prend pas en compte.
 
 Pour envoyer par e-mail ces fichiers, vous pouvez soit copier leur contenu dans votre application d'e-mail, soit l'envoyer via une ligne de commande.
 Le copier-coller cause souvent des problèmes de formatage, spécialement avec les applications « intelligentes » qui ne préservent pas les retours à la ligne et les types d'espace.
@@ -678,11 +678,31 @@ Vous pouvez positionner ces valeurs séparément avec une série de commandes `g
 	  sslverify = false
 
 Si votre serveur IMAP n'utilise pas SSL, les deux dernières lignes ne sont probablement pas nécessaires et le paramètre `host` commencera par `imap://` au lieu de `imaps://`.
-Quand c'est fait, vous pouvez utiliser la commande `git send-email` pour placer la série de patchs dans le répertoire *Drafts* du serveur IMAP spécifié :
+Quand c'est fait, vous pouvez utiliser la commande `git imap-send` pour placer la série de patchs dans le répertoire *Drafts* du serveur IMAP spécifié :
+
+	$ cat *.patch |git imap-send
+	Resolving imap.gmail.com... ok
+	Connecting to [74.125.142.109]:993... ok
+	Logging in...
+	sending 2 messages
+	100% (2/2) done
+
+À présent, vous devriez pouvoir vous rendre dans le répertoire *Drafts*, changer le champ destinataire pour celui de la liste de diffusion, y ajouter optionnellement en copie le mainteneur du projet ou le responsable et l'envoyer.
+
+Une autre méthode consiste à envoyer vos patchs par un serveur SMTP.
+Comme précédemment, vous pouvez régler chaque paramètre séparément avec une série de commandes `git config` ou vous pouvez les ajouter directement dans la section `sendemail` de votre fichier `~/.gitconfig` :
+
+	[sendemail]
+	  smtpencryption = tls
+	  smtpserver = smtp.gmail.com
+	  smtpuser = user@gmail.com
+	  smtpserverport = 587
+
+Après ceci, vous pouvez utiliser la commande `git send-email` pour envoyer vos patchs :
 
 	$ git send-email *.patch
-	0001-Ajout-d-une-limite-la-fonction-de-log.patch
-	0002-change-la-largeur-du-log-de-25-a-30.patch
+	0001-added-limit-to-log-function.patch
+	0002-changed-log-output-to-30-from-25.patch
 	Who should the emails appear to be from? [Jessica Smith <jessica@example.com>]
 	Emails will be sent from: Jessica Smith <jessica@example.com>
 	Who should the emails be sent to? jessica@example.com
@@ -707,8 +727,6 @@ Ensuite, Git crache un certain nombre d'informations qui ressemblent à ceci pou
 
 	Result: OK
 
-À présent, vous devriez pouvoir vous rendre dans le répertoire Drafts, changer le champ destinataire pour celui de la liste de diffusion, y ajouter optionnellement en copie le mainteneur du projet ou le responsable et l'envoyer.
-
 ### Résumé ###
 
 Ce chapitre a traité quelques-unes des méthodes communes de gestion de types différents de projets Git que vous pourrez rencontrer et a introduit un certain nombre de nouveaux outils pour vous aider à gérer ces processus.
@@ -723,7 +741,7 @@ Que vous mainteniez le dépôt de référence ou que vous souhaitiez aider en v�
 
 ### Travail dans des branches thématiques ###
 
-Quand vous vous apprêtez à intégrer des contributions, un bonne idée consiste à les essayer d'abord dans une branche thématique, une branche temporaire spécifiquement créée pour essayer cette nouveauté.
+Quand vous vous apprêtez à intégrer des contributions, une bonne idée consiste à les essayer d'abord dans une branche thématique, une branche temporaire spécifiquement créée pour essayer cette nouveauté.
 De cette manière, il est plus facile de rectifier un patch à part et de le laisser s'il ne fonctionne pas jusqu'à ce que vous disposiez de temps pour y travailler.
 Si vous créez une simple branche nommée d'après le thème de la modification que vous allez essayer, telle que `ruby_client` ou quelque chose d'aussi descriptif, vous pouvez vous en souvenir simplement plus tard.
 Le mainteneur du projet Git a l'habitude d'utiliser des espaces de nommage pour ses branches, tels que `sc/ruby_client`, où `sc` représente les initiales de la personne qui a contribué les modifications.

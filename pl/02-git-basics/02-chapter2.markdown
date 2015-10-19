@@ -47,7 +47,7 @@ Pamiętaj, że każdy plik w twoim katalogu roboczym może być w jednym z dwóc
 Kiedy zmieniasz pliki, Git rozpoznaje je jako zmodyfikowane, ponieważ różnią się od ostatniej zatwierdzonej zmiany. Zmodyfikowane pliki umieszczasz w poczekalni, a następnie zatwierdzasz oczekujące tam zmiany i tak powtarza się cały cykl. Przedstawia go Diagram 2-1.
 
 Insert 18333fig0201.png 
-Figure 2-1. Cykl życia stanu twoich plików.
+Rysunek 2-1. Cykl życia stanu twoich plików.
 
 ### Sprawdzanie stanu twoich plików ###
 
@@ -55,7 +55,7 @@ Podstawowe narzędzie używane do sprawdzenia stanu plików to polecenie `git st
 
 	$ git status
 	# On branch master
-	nothing to commit (working directory clean)
+	nothing to commit, working directory clean
 
 Oznacza to, że posiadasz czysty katalog roboczy — innymi słowy nie zawiera on śledzonych i zmodyfikowanych plików. Git nie widzi także żadnych plików nieśledzonych, w przeciwnym wypadku wyświetliłby ich listę. W końcu polecenie pokazuje również gałąź, na której aktualnie pracujesz. Póki co, jest to zawsze master, wartość domyślna; nie martw się tym jednak teraz. Następny rozdział w szczegółach omawia gałęzie oraz odniesienia.
 
@@ -170,11 +170,16 @@ Wyrażenia glob są jak uproszczone wyrażenia regularne, używane przez powłok
 Poniżej znajdziesz kolejny przykład pliku `.gitignore`:
 
 	# komentarz — ta linia jest ignorowana
-	*.a       # żadnych plików .a
-	!lib.a    # ale uwzględniaj lib.a, pomimo ignorowania .a w linijce powyżej
-	/TODO     # ignoruj plik TODO w katalogu głównym, ale nie podkatalog/TODO
-	build/    # ignoruj wszystkie pliki znajdujące się w katalogu build/
-	doc/*.txt # ignoruj doc/notatki.txt, ale nie doc/server/arch.txt
+	# żadnych plików .a
+	*.a
+	# ale uwzględniaj lib.a, pomimo ignorowania .a w linijce powyżej
+	!lib.a
+	# ignoruj plik TODO w katalogu głównym, ale nie podkatalog/TODO
+	/TODO
+	# ignoruj wszystkie pliki znajdujące się w katalogu build/
+	build/
+	# ignoruj doc/notatki.txt, ale nie doc/server/arch.txt
+	doc/*.txt
 
 ### Podgląd zmian w poczekalni i poza nią ###
 
@@ -584,13 +589,13 @@ Są to jedynie podstawowe opcje formatowania wyjścia polecenia `git log` - jest
 
 Jako dodatek do opcji formatowania, git log przyjmuje także zestaw parametrów ograniczających wynik do określonego podzbioru. Jeden z takich parametrów pokazaliśmy już wcześniej: opcja `-2`, która spowodowała pokazanie jedynie dwóch ostatnich rewizji. Oczywiście, możesz podać ich dowolną liczbę - `-<n>`, gdzie `n` jest liczbą całkowitą. Na co dzień raczej nie będziesz używał jej zbyt często, ponieważ Git domyślnie przekazuje wynik do narzędzia stronicującego, w skutek czego i tak jednocześnie widzisz tylko jedną jego stronę.
 
-Inaczej jest z w przypadku opcji ograniczania w czasie takich jak `--sience` (od) oraz `--until` (do) które są wyjątkowo przydatne. Na przykład, poniższe polecenie pobiera listę zmian dokonanych w ciągu ostatnich dwóch tygodni:
+Inaczej jest z w przypadku opcji ograniczania w czasie takich jak `--since` (od) oraz `--until` (do) które są wyjątkowo przydatne. Na przykład, poniższe polecenie pobiera listę zmian dokonanych w ciągu ostatnich dwóch tygodni:
 
 	$ git log --since=2.weeks
 
 Polecenie to obsługuje mnóstwo formatów - możesz uściślić konkretną datę (np. "2008-01-15") lub podać datę względną jak np. 2 lata 1 dzień 3 minuty temu.
 
-Możesz także odfiltrować listę pozostawiając jedynie rewizje spełniające odpowiednie kryteria wyszukiwania. Opcja `--author` pozwala wybierać po konkretnym autorze, a opcja `--grep` na wyszukiwanie po słowach kluczowych zawartych w notkach zmian. (Zauważ, że jeżeli potrzebujesz określić zarówno autora jak i słowa kluczowe, musisz dodać opcję `--all-match` - w przeciwnym razie polecenie dopasuje jedynie wg jednego z kryteriów)
+Możesz także odfiltrować listę pozostawiając jedynie rewizje spełniające odpowiednie kryteria wyszukiwania. Opcja `--author` pozwala wybierać po konkretnym autorze, a opcja `--grep` na wyszukiwanie po słowach kluczowych zawartych w notkach zmian. (Zauważ, że jeżeli potrzebujesz określić zarówno autora jak i słowa kluczowe, musisz dodać opcję `--all-match` - w przeciwnym razie polecenie dopasuje jedynie wg jednego z kryteriów).
 
 Ostatnią, szczególnie przydatną opcją, akceptowaną przez `git log` jako filtr, jest ścieżka. Możesz dzięki niej ograniczyć wynik wyłącznie do rewizji, które modyfikują podane pliki. Jest to zawsze ostatnia w kolejności opcja i musi być poprzedzona podwójnym myślnikiem `--`, tak żeby oddzielić ścieżki od pozostałych opcji.
 
@@ -598,7 +603,7 @@ W tabeli 2-3 znajduje się ta jak i kilka innych często używanych opcji.
 
 	Opcja	Opis
 	-(n)	Pokaż tylko ostatnie n rewizji.
-	--sience, --after	Ogranicza rewizje do tych wykonanych po określonej dacie.
+	--since, --after	Ogranicza rewizje do tych wykonanych po określonej dacie.
 	--until, --before	Ogranicza rewizje do tych wykonanych przed określoną datą.
 	--author	Pokazuje rewizje, których wpis autora pasuje do podanego.
 	--committer	Pokazuje jedynie te rewizje w których osoba zatwierdzająca zmiany pasuje do podanej.
@@ -766,7 +771,7 @@ Teraz możesz używać nazwy pb zamiast całego adresu URL. Na przykład, jeżel
 	 * [new branch]      master     -> pb/master
 	 * [new branch]      ticgit     -> pb/ticgit
 
-Główna gałąź (master) Paula jest dostępna lokalnie jako `pb\master` - możesz scalić ją do którejś z własnych gałęzi lub, jeśli chcesz, jedynie ją przejrzeć przełączając się do lokalnej gałęzi.
+Główna gałąź (master) Paula jest dostępna lokalnie jako `pb/master` - możesz scalić ją do którejś z własnych gałęzi lub, jeśli chcesz, jedynie ją przejrzeć przełączając się do lokalnej gałęzi.
 
 ### Pobieranie i wciąganie zmian ze zdalnych repozytoriów (polecenia fetch i pull) ###
 
@@ -870,7 +875,7 @@ Możesz także wyszukiwać etykiety za pomocą wzorca. Na przykład, repozytoriu
 
 ### Tworzenie etykiet ###
 
-Git używa 2 głównych rodzajów etykiet: lekkich i opisanych. Pierwsze z nich - lekkie - zachowują się mniej więcej tak jak gałąź, która się nie zmienia - jest to tylko wskaźnik do konkretnej rewizji. Z kolei, etykiety opisane są przechowywane jako pełne obiekty w bazie danych Gita. Są one opatrywane sumą kontrolną, zawierają nazwisko osoby etykietującej, jej adres e-mail oraz datę; ponadto, posiadają notkę etykiety, oraz mogą być podpisywane i weryfikowane za pomocą GNU Privacy Guard (GPG). Ogólnie zaleca się aby przy tworzeniu etykiet opisanych uwzględniać wszystkie te infromacje; a jeżeli potrzebujesz jedynie etykiety tymczasowej albo z innych powodów nie potrzebujesz tych wszystkich danych, możesz po prostu użyć etykiety lekkiej.
+Git używa 2 głównych rodzajów etykiet: lekkich i opisanych. Pierwsze z nich - lekkie - zachowują się mniej więcej tak jak gałąź, która się nie zmienia - jest to tylko wskaźnik do konkretnej rewizji. Z kolei, etykiety opisane są przechowywane jako pełne obiekty w bazie danych Gita. Są one opatrywane sumą kontrolną, zawierają nazwisko osoby etykietującej, jej adres e-mail oraz datę; ponadto, posiadają notkę etykiety, oraz mogą być podpisywane i weryfikowane za pomocą GNU Privacy Guard (GPG). Ogólnie zaleca się aby przy tworzeniu etykiet opisanych uwzględniać wszystkie te informacje; a jeżeli potrzebujesz jedynie etykiety tymczasowej albo z innych powodów nie potrzebujesz tych wszystkich danych, możesz po prostu użyć etykiety lekkiej.
 
 ### Etykiety opisane ###
 
@@ -1061,7 +1066,7 @@ Jeśli używasz powłoki Bash, Git jest wyposażony w poręczny skrypt auto-uzup
 
 	source ~/.git-completion.bash
 
-Jeśli chcesz ustawić Gita tak, żeby automatycznie pozwalał na auto-uzupełnianie wszystkim użytkownikom, skopiuj wymieniony skrypt do katalogu `/opt/local/etc/bash_completion.d` na systamach Mac, lub do `/etc/bash_completion.d/` w Linuxie. Jest to katalog skryptów ładowanych automatycznie przez Basha, dzięki czemu opcja zostanie włączona wszystkim użytkownikom.
+Jeśli chcesz ustawić Gita tak, żeby automatycznie pozwalał na auto-uzupełnianie wszystkim użytkownikom, skopiuj wymieniony skrypt do katalogu `/opt/local/etc/bash_completion.d` na systemach Mac, lub do `/etc/bash_completion.d/` w Linuxie. Jest to katalog skryptów ładowanych automatycznie przez Basha, dzięki czemu opcja zostanie włączona wszystkim użytkownikom.
 
 Jeśli używasz Windows wraz z narzędziem Git Bash, które jest domyślnie instalowane wraz wraz z msysGit, auto-uzupełnianie powinno być pre-konfigurowane i dostępne od razu.
 
@@ -1116,7 +1121,7 @@ Możesz dzięki niemu łatwo zobaczyć ostatnią rewizję:
 
 Jak można zauważyć, Git zastępuje nowe polecenie czymkolwiek co do niego przypiszesz. Jednakże, możesz chcieć także uruchomić zewnętrzne polecenie zamiast polecenia Gita. Rozpocznij je wówczas znakiem wykrzyknika `!`. Przydaje się to podczas tworzenia własnego narzędzia, które współpracuje z repozytorium Gita. Możemy pokazać to na przykładzie aliasu `git visual` uruchamiającego `gitk`:
 
-	$ git config --global alias.visual "!gitzk"
+	$ git config --global alias.visual "!gitk"
 
 ## Podsumowanie ##
 

@@ -374,7 +374,7 @@ Le résultat ressemble à ceci :
 
 Ici aussi, tous les *commits* locaux dans Git ou ceux poussé sur Subversion dans l'intervalle n'apparaissent pas.
 
-#### L'information sur la serveur SVN ####
+#### L'information sur le serveur SVN ####
 
 Vous pouvez aussi obtenir le même genre d'information que celle fournie par `svn info` en lançant `git svn info` :
 
@@ -445,8 +445,8 @@ Créez un fichier appelé `users.txt` contenant cette équivalence dans le forma
 
 Pour récupérer la liste des noms d'auteurs utilisés par SVN, vous pouvez utiliser la ligne suivante :
 
-	$ svn log --xml | grep -P "^<author" | sort -u | \
-	      perl -pe 's/<author>(.*?)<\/author>/$1 = /'
+	$ svn log ^/ --xml | grep -P "^<author" | sort -u | \
+	      perl -pe 's/<author>(.*?)<\/author>/$1 = /' > users.txt
 
 Cela génère une sortie au format XML — vous pouvez visualiser les auteurs, créer une liste unique puis éliminer l'XML.
 Évidemment, cette ligne ne fonctionne que sur une machine disposant des commandes `grep`, `sort` et `perl`.
@@ -456,7 +456,7 @@ Vous pouvez alors fournir ce fichier à `git svn` pour l'aider à convertir les 
 Vous pouvez aussi indiquer à `git svn` de ne pas inclure les méta-données que Subversion importe habituellement en passant l'option `--no-metadata` à la commande `clone` ou `init`.
 Au final, votre commande d'import ressemble à ceci :
 
-	$ git-svn clone http://mon-projet.googlecode.com/svn/ \
+	$ git svn clone http://mon-projet.googlecode.com/svn/ \
 	      --authors-file=users.txt --no-metadata -s my_project
 
 Maintenant, l'import depuis Subversion dans le répertoire `my_project` est plus présentable.
@@ -479,7 +479,7 @@ les *commits* ressemblent à ceci :
 
 	    fixed install - go to trunk
 
-Non seulement le champ auteur a meilleure mine, mais de plus le champ `git-svn-id` a disparu.
+Non seulement le champ auteur a meilleure mine, mais de plus, le champ `git-svn-id` a disparu.
 
 Il est encore nécessaire de faire un peu de ménage `post-import`. Déjà, vous devriez nettoyer les références bizarres que `git svn` crée.
 Premièrement, déplacez les étiquettes pour qu'elles soient de vraies étiquettes plutôt que des branches distantes étranges, ensuite déplacez le reste des branches pour qu'elles deviennent locales.
@@ -500,7 +500,7 @@ Ensuite, déplacez le reste des références sous `refs/remotes` en branches loc
 
 À présent, toutes les vieilles branches sont des vraies branches Git et toutes les vieilles étiquettes sont de vraies étiquettes Git.
 La dernière activité consiste à ajouter votre nouveau serveur Git comme serveur distant et à y pousser votre projet transformé.
-Pour pousser tout, y compris branches et étiquettes, lancez :
+Pour pousser le tout, y compris branches et étiquettes, lancez :
 
 	$ git push origin --tags
 
@@ -509,14 +509,14 @@ Toutes vos données, branches et tags sont à présent disponibles sur le serveu
 ### Perforce ###
 
 L'autre système duquel on peut souhaiter importer les données est Perforce.
-Un outil d'import Perforce est aussi distribué avec Git, mais seulement dans la section `contrib` du code source.
-Il n'est pas disponible par défaut comme `git svn`.
-Pour le lancer, il vous faut récupérer le code source de Git que vous pouvez télécharger à partir de `git.kernel.org` :
+Un outil d'import Perforce est aussi distribué avec Git.
+Si votre version de Git est antérieures à 1.7.11, celui-ci n'est disponible que dans la section `contrib` du code source.
+Dans ce dernier cas, pour le lancer, il vous faut récupérer le code source de Git que vous pouvez télécharger à partir de `git.kernel.org` :
 
 	$ git clone git://git.kernel.org/pub/scm/git/git.git
 	$ cd git/contrib/fast-import
 
-Dans ce répertoire `fast-import`, vous devriez trouver une script exécutable Python appelé `git-p4`.
+Dans ce répertoire `fast-import`, vous devriez trouver un script exécutable Python appelé `git-p4`.
 Python et l'outil `p4` doivent être installés sur votre machine pour que cet import fonctionne.
 Par exemple, nous importerons le projet Jam depuis le Perforce Public Depot.
 Pour installer votre client, vous devez exporter la variable d'environnement `P4PORT` qui pointe sur le dépôt Perforce :
@@ -556,7 +556,7 @@ Si vous vous rendez dans le répertoire  `/opt/p4import` et lancez la commande `
 Vous pouvez visualiser l'identifiant `git-p4` de chaque *commit*.
 Il n'y a pas de problème à garder cet identifiant ici, au cas où vous auriez besoin de référencer dans l'avenir le numéro de modification Perforce.
 Cependant, si vous souhaitez supprimer l'identifiant, c'est le bon moment, avant de commencer à travailler avec le nouveau dépôt.
-Vous pouvez utiliser `git filter-branch` pour faire une retrait en masse des chaînes d'identifiant :
+Vous pouvez utiliser `git filter-branch` pour faire un retrait en masse des chaînes d'identifiant :
 
 	$ git filter-branch --msg-filter '
 	        sed -e "/^\[git-p4:/d"
@@ -764,7 +764,7 @@ Si vous lancez ce script, vous obtiendrez un contenu qui ressemble à ceci :
 	new version one
 	(...)
 
-Pour lancer l'outil d'import, redirigez cette sortie dans `git fast-import` alors que vous vous trouvez dans le répertoire Git dans lequel vous souhaitez importer.
+Pour lancer l'outil d'import, redirigez cette sortie dans `git fast-import` alors que vous vous trouvez dans le projet Git dans lequel vous souhaitez importer.
 Vous pouvez créer un nouveau répertoire, puis l'initialiser avec `git init`, puis lancer votre script :
 
 	$ git init

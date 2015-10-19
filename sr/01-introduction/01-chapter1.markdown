@@ -161,9 +161,9 @@ Or if you’re on a Debian-based distribution like Ubuntu, try apt-get:
 
 ### Installing on Mac ###
 
-There are two easy ways to install Git on a Mac. The easiest is to use the graphical Git installer, which you can download from the Google Code page (see Figure 1-7):
+There are two easy ways to install Git on a Mac. The easiest is to use the graphical Git installer, which you can download from the SourceForge page (see Figure 1-7):
 
-	http://code.google.com/p/git-osx-installer
+	http://sourceforge.net/projects/git-osx-installer/
 
 Insert 18333fig0107.png 
 Figure 1-7. Git OS X installer
@@ -176,9 +176,9 @@ You don’t have to add all the extras, but you’ll probably want to include +s
 
 ### Installing on Windows ###
 
-Installing Git on Windows is very easy. The msysGit project has one of the easier installation procedures. Simply download the installer exe file from the Google Code page, and run it:
+Installing Git on Windows is very easy. The msysGit project has one of the easier installation procedures. Simply download the installer exe file from the GitHub page, and run it:
 
-	http://code.google.com/p/msysgit
+	http://msysgit.github.com/
 
 After it’s installed, you have both a command-line version (including an SSH client that will come in handy later) and the standard GUI.
 

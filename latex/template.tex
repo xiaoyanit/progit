@@ -13,6 +13,11 @@
 \usepackage{booktabs}
 \usepackage{indentfirst}
 \usepackage{framed,color}
+\usepackage{caption}
+\usepackage{longtable}
+\captionsetup{font=bf,position=below}
+
+\usepackage{ctable}
 
 \definecolor{shadecolor}{gray}{0.90}
 
@@ -89,8 +94,9 @@
 \newcommand{\img}[1]{\begin{figure}[ht!]
 	\refstepcounter{img}
 	\label{img:\theimg}
-	\centering\includegraphics[width=\maxwidth]{figures/\theimg.png}
-	\textbf{\caption{#1}}
+	\centering\IfFileExists{figures/\theimg.pdf}{\includegraphics[width=\maxwidth]{figures/\theimg.pdf}}{\includegraphics[width=\maxwidth]{figures/\theimg.png}}
+
+	\caption{#1}
 \end{figure}}
 
 \newcounter{tab}[chapter]

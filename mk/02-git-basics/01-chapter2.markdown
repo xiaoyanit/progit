@@ -54,7 +54,7 @@ Insert 18333fig0201.png
 Главната алатка која ја користите за да дознаете кој фајл во која фаза се наоѓа е Git статус командата. Ако ја извршите оваа комнада веднаш по клонирањето треба да забележите нешто вака:
 	$ git status
 	# On branch master
-	nothing to commit (working directory clean)
+	nothing to commit, working directory clean
 
 Ова значи дека имате чист работен директориѕм, т.е. не постојат следени и променети фајлови. Git не нашол неследени фајлови, во спротивно ќе бидат прикажани овде. Како последна информација што ви ја дава оваа команда е тоа на кој бранч се наоѓате. За сега тоа секогаш е главниот бранч кој е предодреден; не треба да ве засега тоа во овој момент. Во следното поглавје ќе бидат детално разгледани бранчовите и референците.  
 
@@ -169,11 +169,16 @@ Glob patterns are like simplified regular expressions that shells use. An asteri
 Here is another example .gitignore file:
 
 	# a comment – this is ignored
-	*.a       # no .a files
-	!lib.a    # but do track lib.a, even though you're ignoring .a files above
-	/TODO     # only ignore the root TODO file, not subdir/TODO
-	build/    # ignore all files in the build/ directory
-	doc/*.txt # ignore doc/notes.txt, but not doc/server/arch.txt
+	# no .a files
+	*.a
+	# but do track lib.a, even though you're ignoring .a files above
+	!lib.a
+	# only ignore the root TODO file, not subdir/TODO
+	/TODO
+	# ignore all files in the build/ directory
+	build/
+	# ignore doc/notes.txt, but not doc/server/arch.txt
+	doc/*.txt
 
 ### Viewing Your Staged and Unstaged Changes ###
 

@@ -60,7 +60,7 @@ Ajoutez l'option `--abbrev-commit` à la commande `git log` et le résultat affi
 En règle générale, entre 8 et 10 caractères sont largement suffisant pour assurer l'unicité dans un projet.
 Un des plus gros projets utilisant Git, le noyau Linux, nécessite de plus en plus fréquemment 12 caractères sur les 40 possibles pour assurer l'unicité.
 
-### QUELQUES MOTS SUR SHA-1 ###
+### Quelques mots sur SHA-1 ###
 
 Beaucoup de gens s'inquiètent qu'à un moment donné ils auront, par des circonstances hasardeuses, deux objets dans leur référentiel de hachage de même empreinte SHA-1.
 Qu'en est-il réellement ?
@@ -70,7 +70,7 @@ Si vous essayez de récupérer l'objet de nouveau à un moment donné, vous auri
 
 Quoi qu'il en soit, vous devriez être conscient à quel point ce scénario est ridiculement improbable.
 Une empreinte SHA-1 porte sur 20 octets soit 160 bits.
-Le nombre d'objets aléatoires à hacher requis pour assurer une probabilité de collision de 50 % vaut environ 2^80 (la formule pour calculer la probabilité de collision est `p = (n(n-1)/2) * (1/2^160))`.
+Le nombre d'objets aléatoires à hacher requis pour assurer une probabilité de collision de 50 % vaut environ 2^80 (la formule pour calculer la probabilité de collision est `p = (n(n-1)/2) * (1/2^160)`).
 2^80 vaut 1,2 × 10^24 soit 1 million de milliards de milliards.
 Cela représente 1200 fois le nombre de grains de sable sur Terre.
 
@@ -504,7 +504,7 @@ Votre répertoire de travail est propre :
 
 	$ git status
 	# On branch master
-	nothing to commit (working directory clean)
+	nothing to commit, working directory clean
 
 À ce moment, vous pouvez facilement changer de branche et travailler autre part ; vos modifications sont conservées dans votre pile.
 Pour voir quelles remises vous avez sauvegardées, vous pouvez utiliser la commande `git stash list` :
@@ -577,7 +577,7 @@ La création d'un alias permettra d'ajouter effectivement la commande `stash-una
 Par exemple :
 
     $ git config --global alias.stash-unapply '!git stash show -p | git apply -R'
-    $ git stash
+    $ git stash apply
     $ #... work work work
     $ git stash-unapply
 
@@ -822,7 +822,7 @@ Pour supprimer un fichier nommé « passwords.txt » de tout votre historique,
 
 L'option `--tree-filter` exécute la commande spécifiée pour chaque *commit* et le revalide ensuite.
 Dans le cas présent, vous supprimez le fichier nommé « passwords.txt » de chaque contenu, qu'il existait ou non.
-Si vous voulez supprimer tous les fichiers temporaires des éditeurs validés accidentellement, vous pouvez exécuter une commande telle que `git filter-branch --tree-filter 'rm -f *~' HEAD`.
+Si vous voulez supprimer tous les fichiers temporaires des éditeurs validés accidentellement, vous pouvez exécuter une commande telle que `git filter-branch --tree-filter "find * -type f -name '*~' -delete" HEAD`.
 
 Vous pourrez alors regarder Git réécrire l'arbre des *commits* et revalider à chaque fois, pour finir en modifiant la référence de la branche.
 C'est généralement une bonne idée de le faire dans un branche de test puis de faire une réinitialisation forte (*hard-reset*) de votre branche `master` si le résultat vous convient.
@@ -1278,7 +1278,7 @@ La fusion de la pieuvre peut gérer plusieurs branches mais elle est plus pruden
 
 Cependant, il existe d'autres stratégies que vous pouvez tout aussi bien choisir.
 L'une d'elles est la fusion de sous-arborescence que vous pouvez utiliser pour gérer la problématique du sous-projet.
-Nous allons donc voir comme gérer l'inclusion de `rack` comme dans la section précédente, mais en utilisant cette fois-ci les fusions de sous-arborescence.
+Nous allons donc voir comment gérer l'inclusion de `rack` comme dans la section précédente, mais en utilisant cette fois-ci les fusions de sous-arborescence.
 
 La fusion de sous-arborescence suppose que vous ayez deux projets et que l'un s'identifie à un sous-répertoire de l'autre.
 Lorsque vous spécifiez une fusion de sous-arborescence, Git est assez intelligent pour deviner lequel est un sous-répertoire de l'autre et fusionne en conséquence — c'est assez bluffant.
@@ -1316,7 +1316,7 @@ Si vous récupérez l'une puis l'autre branche, vous pouvez voir que vous avez d
 
 Pour tirer le projet Rack dans votre projet `master` comme un sous-répertoire, vous pouvez utiliser la commande `git read-tree`.
 Vous apprendrez davantage sur `read-tree` et compagnie dans le chapitre 9, mais pour le moment, sachez qu'il lit la racine d'une de vos branches et l'inscrit dans votre index et votre répertoire de travail.
-Vous venez juste de commuter vers votre branche `master` et vous tirez la branche `rack` vers le sous-répertoire `rack` de votre branche `master` de votre projet principal :
+Vous venez juste de commuter vers votre branche `master` et vous tirez la branche `rack_branch` vers le sous-répertoire `rack` de votre branche `master` de votre projet principal :
 
 	$ git read-tree --prefix=rack/ -u rack_branch
 

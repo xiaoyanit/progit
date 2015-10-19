@@ -6,23 +6,23 @@ V této kapitole se dozvíte, jak pracovat se systémem Git v distribuovaném pr
 
 ## Distribuované pracovní postupy ##
 
-Na rozdíl od centralizovaných systémů správy verzí (CVCS) umožňuje distribuovaný charakter systému Git mnohem větší flexibilitu při spolupráci vývojářů na projektech. V centralizovaných systémech představuje každý vývojář samostatný uzel, pracující více či méně na stejné úrovni vůči centrálnímu úložišti. Naproti tomu je v systému Git každý vývojář potenciálním uzlem i úložištěm, každý vývojář může přispívat kódem do jiných repozitářů i spravovat veřejný repozitář, na němž mohou ostatní založit svou práci a do nějž mohou přispívat. Tím se otvírá široké spektrum možností organizace práce pro váš projekt a/nebo váš tým. Zkusíme se tedy podívat na pár častých postupů, které tato flexibilita umožňuje. Uvedeme přednosti i eventuální slabiny všech těchto postupů. Budete si moci vybrat některý z postupů nebo je navzájem kombinovat a spojovat jejich funkce.
+Na rozdíl od centralizovaných systémů správy verzí (CVCS) umožňuje distribuovaný charakter systému Git mnohem větší flexibilitu při spolupráci vývojářů na projektech. V centralizovaných systémech představuje každý vývojář samostatný uzel, pracující více či méně na stejné úrovni vůči centrálnímu úložišti. Naproti tomu je v systému Git každý vývojář potenciálním uzlem i úložištěm, každý vývojář může přispívat kódem do jiných repozitářů i spravovat veřejný repozitář, na němž mohou ostatní založit svou práci a do nějž mohou přispívat. Tím se pro váš projekt a váš tým otvírá široké spektrum pracovních postupů. Zkusíme se tedy podívat na pár častých přístupů, které tato flexibilita umožňuje. Uvedeme jejich přednosti i eventuální slabiny. Budete si moci vybrat některý z postupů nebo je navzájem kombinovat a spojovat jejich vlastnosti.
 
 ### Centralizovaný pracovní postup ###
 
 V centralizovaných systémech je většinou možný pouze jediný model spolupráce, tzv. centralizovaný pracovní postup. Jedno centrální úložiště (hub) nebo repozitář přijímá zdrojový kód a každý podle něj synchronizuje svou práci. Několik vývojářů představuje jednotlivé uzly (nodes) – uživatele centrálního místa – které se podle tohoto místa synchronizují (viz obrázek 5-1).
 
 Insert 18333fig0501.png
-Figure 5-1. Centralizovaný pracovní postup
+Obrázek 5-1. Centralizovaný pracovní postup
 
 To znamená, že pokud dva vývojáři klonují z centrálního úložiště a oba provedou změny, jen první z nich, který odešle své změny, to může provést bez komplikací. Druhý vývojář musí před odesláním svých změn začlenit práci prvního vývojáře do své, aby nepřepsal jeho změny. Tento koncept platí jak pro Git, tak pro Subversion (popř. jakýkoli CVCS). I v systému Git funguje bez problémů.
 
-Pokud pracujete v malém týmu nebo už jste ve své společnosti nebo ve svém týmu zvyklí na centralizovaný pracovní postup, můžete v něm beze všeho pokračovat. Jednoduše vytvořte repozitář a přidělte všem ze svého týmu oprávnění k odesílání dat. Git neumožní uživatelům, aby se navzájem přepisovali. Pokud některý z vývojářů naklonuje data, provede změny a poté se je pokusí odeslat, a jiný vývojář mezitím odeslal svoje revize, server tyto změny odmítne. Git vývojáři při odmítnutí sdělí, že se pokouší odeslat změny, které nesměřují „rychle vpřed“, což není možné provést, dokud nevyzvedne a nezačlení stávající data z repozitáře.
+Pokud pracujete v malém týmu nebo už jste ve své společnosti nebo ve svém týmu zvyklí na centralizovaný pracovní postup, můžete v něm beze všeho pokračovat. Jednoduše vytvořte repozitář a přidělte všem ze svého týmu oprávnění k odesílání dat. Git neumožní uživatelům, aby se navzájem přepisovali. Pokud některý z vývojářů naklonuje data, provede změny a poté se je pokusí odeslat, a jiný vývojář mezitím odeslal svoje revize, server tyto změny odmítne. Git vývojáři při odmítnutí sdělí, že se pokouší odeslat změny, které nesměřují „rychle vpřed“, což není možné provést, dokud nevyzvedne a nezačlení (fetch and merge) stávající data z repozitáře.
 Tento pracovní postup může být pro mnoho lidí zajímavý, protože je to schéma, které jsou zvyklí používat a jsou s ním spokojeni.
 
 ### Pracovní postup s integračním manažerem ###
 
-Protože Git umožňuje, abyste měli několik vzdálených repozitářů, lze použít pracovní postup, kdy má každý vývojář oprávnění k zápisu do vlastního veřejného repozitáře a oprávnění pro čtení k repozitářům všech ostatních. Tento scénář často zahrnuje jeden standardní repozitář, který reprezentuje „oficiální“ projekt. Chcete-li do tohoto projektu přispívat, vytvořte vlastní veřejný klon projektu a odešlete do něj změny, které jste provedli. Poté odešlete správci hlavního projektu žádost, aby do projektu natáhl vaše změny. Váš repozitář může přidat jako vzdálený repozitář, lokálně otestovat vaše změny, začlenit je do své větve a odeslat zpět do svého repozitáře. Postup práce je následující (viz obrázek 5-2):
+Protože Git umožňuje, abyste měli několik vzdálených repozitářů, lze použít pracovní postup, kdy má každý vývojář oprávnění k zápisu do vlastního veřejného repozitáře a oprávnění pro čtení k repozitářům všech ostatních. Tento scénář často zahrnuje jeden standardní repozitář, který reprezentuje „oficiální“ projekt. Chcete-li do tohoto projektu přispívat, vytvořte vlastní veřejný klon projektu a odešlete do něj změny, které jste provedli. Poté odešlete správci hlavního projektu žádost, aby do projektu natáhl vaše změny. Správce může váš repozitář přidat jako vzdálený repozitář, lokálně otestovat vaše změny, začlenit je do své větve a odeslat zpět do svého repozitáře. Postup práce je následující (viz obrázek 5-2):
 
 1. Správce projektu odešle data do svého veřejného repozitáře.
 2. Přispěvatel naklonuje tento repozitář a provede změny.
@@ -32,9 +32,9 @@ Protože Git umožňuje, abyste měli několik vzdálených repozitářů, lze p
 6. Správce odešle začleněné změny do hlavního repozitáře.
 
 Insert 18333fig0502.png
-Figure 5-2. Pracovní postup s integračním manažerem
+Obrázek 5-2. Pracovní postup s integračním manažerem
 
-Tento pracovní postup je velmi rozšířený na stránkách jako GitHub, kde je snadné rozštěpit projekt a odeslat změny do své odštěpené části, kde jsou pro každého k nahlédnutí. Jednou z hlavních předností tohoto postupu je, že můžete pracovat bez přerušení a správce hlavního repozitáře může natáhnout vaše změny do projektu, kdykoli uzná za vhodné. Přispěvatelé nemusí čekat, až budou jejich změny začleněny do projektu – každá strana může pracovat svým tempem.
+Tento pracovní postup je velmi rozšířený na serverech jako je GitHub, kde je snadné rozštěpit projekt a odeslat změny do své odštěpené části, kde jsou pro každého k nahlédnutí. Jednou z hlavních předností tohoto postupu je, že můžete pracovat bez přerušení a správce hlavního repozitáře může natáhnout vaše změny do projektu, kdykoli uzná za vhodné. Přispěvatelé nemusí čekat, až budou jejich změny začleněny do projektu – každá strana může pracovat svým tempem.
 
 ### Pracovní postup s diktátorem a poručíky ###
 
@@ -46,7 +46,7 @@ Jedná se o variantu pracovního postupu s více repozitáři. Většinou se pou
 4. Diktátor odesílá svou hlavní větev do referenčního repozitáře, aby si na jeho základě mohli ostatní vývojáři přeskládat data.
 
 Insert 18333fig0503.png
-Figure 5-3. Pracovní postup s benevolentním diktátorem
+Obrázek 5-3. Pracovní postup s benevolentním diktátorem
 
 Tento typ pracovního postupu není sice obvyklý, ale může být užitečný u velmi velkých projektů nebo v silně hierarchizovaných prostředích, neboť umožňuje, aby vedoucí projektu (diktátor) velkou část práce delegoval. Pak sbírá velké kusy kódu, které integruje.
 
@@ -162,7 +162,7 @@ John nyní nesmí odeslat revize, protože mezitím odeslala své změny Jessica
 V tomto okamžiku vypadá Johnův lokální repozitář jako na obrázku 5-4.
 
 Insert 18333fig0504.png
-Figure 5-4. Johnův výchozí repozitář
+Obrázek 5-4. Johnův výchozí repozitář
 
 John má referenci ke změnám, které odeslala Jessica, ale než bude moci sám odeslat svá data, bude muset začlenit její práci:
 
@@ -174,7 +174,7 @@ John má referenci ke změnám, které odeslala Jessica, ale než bude moci sám
 Sloučení probíhá hladce, Johnova historie revizí teď vypadá jako na obrázku 5-5.
 
 Insert 18333fig0505.png
-Figure 5-5. Johnův repozitář po začlenění větve origin/master
+Obrázek 5-5. Johnův repozitář po začlenění větve `origin/master`
 
 John nyní může otestovat svůj kód, aby se ujistil, že stále pracuje správně, a pak může odeslat svou novou sloučenou práci na server:
 
@@ -186,12 +186,12 @@ John nyní může otestovat svůj kód, aby se ujistil, že stále pracuje sprá
 Johnova historie revizí bude nakonec vypadat jako na obrázku 5-6.
 
 Insert 18333fig0506.png
-Figure 5-6. Johnova historie po odeslání revize na server origin
+Obrázek 5-6. Johnova historie po odeslání revize na server origin
 
 Jessica mezitím pracovala na tematické větvi. Vytvořila tematickou větev s názvem `issue54` a zapsala do ní tři revize. Zatím ještě nevyzvedla Johnovy změny, a proto její historie revizí vypadá jako na obrázku 5-7.
 
 Insert 18333fig0507.png
-Figure 5-7. Výchozí historie revizí – Jessica
+Obrázek 5-7. Výchozí historie revizí – Jessica
 
 Jessica chce synchronizovat svou práci s Johnem, a proto vyzvedne jeho data:
 
@@ -204,7 +204,7 @@ Jessica chce synchronizovat svou práci s Johnem, a proto vyzvedne jeho data:
 Tím stáhne práci, kterou mezitím odeslal John. Historie revizí Jessicy teď vypadá jako na obrázku 5-8.
 
 Insert 18333fig0508.png
-Figure 5-8. Historie Jessicy po vyzvednutí Johnových změn
+Obrázek 5-8. Historie Jessicy po vyzvednutí Johnových změn
 
 Jessica považuje svou tematickou větev za dokončenou, ale chce vědět, do čeho má svou práci začlenit, aby mohla změny odeslat. Spustí proto příkaz `git log`:
 
@@ -215,7 +215,7 @@ Jessica považuje svou tematickou větev za dokončenou, ale chce vědět, do č
 
 	    removed invalid default value
 
-Jessica nyní může začlenit tematickou větev do své hlavní větve, tamtéž začlenit i Johnovu práci (`origin/master`) do své větve `master` a vše odeslat zpět na server. Nejprve se přepne zpět na svou hlavní větev, aby do ní mohla vše integrovat:
+Jessica nyní může začlenit tematickou větev do své větve `master`, začlenit (merge) i Johnovu práci (`origin/master`) do své větve `master` a vše odeslat zpět na server. Nejprve se přepne zpět na svou větev `master`, aby do ní mohla vše integrovat:
 
 	$ git checkout master
 	Switched to branch "master"
@@ -241,7 +241,7 @@ Tento postup je bezproblémový. Jak vidíte, šlo o jednoduchý posun „rychle
 Začlenění proběhne čistě a historie Jessicy bude vypadat jako na obrázku 5-9.
 
 Insert 18333fig0509.png
-Figure 5-9. Historie Jessicy po začlenění Johnových změn
+Obrázek 5-9. Historie Jessicy po začlenění Johnových změn
 
 Větev `origin/master` teď má Jessica dostupnou ze své větve `master`, takže může svou práci úspěšně odeslat (za předpokladu, že John mezitím neodeslal další revize):
 
@@ -253,12 +253,12 @@ Větev `origin/master` teď má Jessica dostupnou ze své větve `master`, takž
 Všichni vývojáři zapsali několik revizí a úspěšně začlenili práci ostatních do své – viz obrázek 5-10.
 
 Insert 18333fig0510.png
-Figure 5-10. Historie Jessicy po odeslání všech změn zpět na server
+Obrázek 5-10. Historie Jessicy po odeslání všech změn zpět na server
 
-Toto je jeden z nejjednodušších pracovních postupů. Po určitou dobu pracujete, obvykle na nějaké tematické větvi, a když je připravena k integraci, začleníte ji do hlavní větve. Chcete-li tuto práci sdílet, začleníte ji do své hlavní větve. Poté vyzvednete a začleníte větev `origin/master`, jestliže se změnila. Nakonec odešlete všechna data do větve `master` na serveru. Obecná posloupnost kroků je naznačena na obrázku 5-11.
+Toto je jeden z nejjednodušších pracovních postupů. Po určitou dobu pracujete, obvykle na nějaké tematické větvi, a když je připravena k integraci, začleníte ji do své větve `master`. Chcete-li tuto práci sdílet, začleníte ji do své větve `master`. Poté vyzvednete (fetch) a začleníte (merge) větev `origin/master`, jestliže se změnila. Nakonec odešlete všechna data do větve `master` na serveru. Obecná posloupnost kroků je naznačena na obrázku 5-11.
 
 Insert 18333fig0511.png
-Figure 5-11. Obecná posloupnost kroků u jednoduchého pracovního postupu s více vývojáři v systému Git
+Obrázek 5-11. Obecná posloupnost kroků u jednoduchého pracovního postupu s více vývojáři v systému Git
 
 ### Soukromý řízený tým ###
 
@@ -304,7 +304,7 @@ Jessica nyní vytvoří několik revizí ve větvi `featureB`:
 Repozitář Jessicy vypadá jako na obrázku 5-12.
 
 Insert 18333fig0512.png
-Figure 5-12. Výchozí historie revizí – Jessica
+Obrázek 5-12. Výchozí historie revizí – Jessica
 
 Jessica je připravena odeslat svou práci, ale dostane e-mail od Josie, že již na server odeslala větev `featureBee`, v níž už je část práce hotová. Než bude Jessica moci odeslat svou práci na server, bude do ní nejprve muset začlenit práci Josie. Změny, které Josie provedla, vyzvedne příkazem `git fetch`:
 
@@ -328,7 +328,7 @@ Tady nastává určitý problém. Musí odeslat práci začleněnou ve své vět
 	To jessica@githost:simplegit.git
 	   fba9af8..cd685d1  featureB -> featureBee
 
-Říká se tomu refspec. Více o vzorcích refspec systému Git a různých možnostech, k nimž je lze využít, najdete v kapitole 9.
+Říká se tomu *refspec*. Více o vzorcích refspec systému Git a různých možnostech, k nimž je lze využít, najdete v kapitole 9.
 
 Poté pošle John Jessice e-mail, že odeslal několik změn do větve `featureA`, a poprosí ji, aby je ověřila. Jessica spustí příkaz `git fetch`, jímž tyto změny stáhne.
 
@@ -369,17 +369,17 @@ Jessica by ráda něco vylepšila, a proto vytvoří novou revizi a odešle ji z
 Historie revizí Jessicy bude nyní vypadat jako na obrázku 5-13.
 
 Insert 18333fig0513.png
-Figure 5-13. Historie Jessicy po zapsání revizí do větve s úkolem
+Obrázek 5-13. Historie Jessicy po zapsání revizí do větve s úkolem
 
 Jessica, Josie a John pošlou zprávu zprostředkovatelům integrace, že větve `featureA` a `featureBee` jsou na serveru připraveny k integraci do hlavní linie. Poté, co budou tyto větve do hlavní linie integrovány, vyzvednutím dat bude možné stáhnout nové revize vzniklé začleněním změn a historie revizí bude vypadat jako na obrázku 5-14.
 
 Insert 18333fig0514.png
-Figure 5-14. Historie Jessicy po začlenění obou jejích tematických větví
+Obrázek 5-14. Historie Jessicy po začlenění obou jejích tematických větví
 
 Mnoho skupin přechází na systém Git právě kvůli této možnosti paralelní spolupráce několika týmů a následného slučování různých linií práce. Možnost, aby několik menších podskupin jednoho týmu spolupracovalo prostřednictvím vzdálených větví a aby si práce nevyžádala účast celého týmu nebo nebránila ostatním v jiné práci, je velkou devízou systému Git. Posloupnost kroků vypadá v případě pracovního postupu, který jsme si právě ukázali, jako na obrázku 5-15.
 
 Insert 18333fig0515.png
-Figure 5-15. Základní posloupnost kroků u pracovního postupu v řízeném týmu
+Obrázek 5-15. Základní posloupnost kroků u pracovního postupu v řízeném týmu
 
 ### Malý veřejný projekt ###
 
@@ -439,7 +439,7 @@ U projektů, u nichž nejste v roli správce, je většinou jednodušší, aby v
 Nyní mají obě vaše témata samostatný zásobník – podobně jako řada záplat – které můžete přepsat, přeskládat a upravit, aniž by se tím obě témata navzájem ovlivňovala nebo omezovala (viz obrázek 5-16).
 
 Insert 18333fig0516.png
-Figure 5-16. Výchozí historie revizí s větví featureB
+Obrázek 5-16. Výchozí historie revizí s větví featureB
 
 Řekněme, že správce projektu natáhl do projektu několik jiných záplat a nyní vyzkoušel vaši první větev, jenže tu už nelze čistě začlenit. V takovém případě můžete zkusit přeskládat tuto větev na vrcholu větve `origin/master`, vyřešit za správce vzniklé konflikty a poté své změny ještě jednou odeslat:
 
@@ -450,7 +450,7 @@ Figure 5-16. Výchozí historie revizí s větví featureB
 Tím přepíšete svou historii, která teď bude vypadat jako na obrázku 5-17.
 
 Insert 18333fig0517.png
-Figure 5-17. Historie revizí s větví featureA
+Obrázek 5-17. Historie revizí s větví featureA
 
 Protože jste větev přeskládali, musíte k příkazu git push přidat parametr `-f`, abyste mohli větev `featureA` na serveru nahradit revizí, která není jejím potomkem. Druhou možností je odeslat tuto novou práci do jiné větve na serveru (nazvané např. `featureAv2`).
 
@@ -467,7 +467,7 @@ Parametr `--squash` (komprimovat) vezme všechnu vaši práci v začleněné vě
 Nyní můžete správci oznámit, že jste provedli požadované změny a že je najde ve vaší větvi `featureBv2` (viz obrázek 5-18).
 
 Insert 18333fig0518.png
-Figure 5-18. Historie revizí s větví featureBv2
+Obrázek 5-18. Historie revizí s větví featureBv2
 
 ### Velký veřejný projekt ###
 
@@ -517,7 +517,7 @@ Příkaz `format-patch` vypíše názvy souborů záplaty, kterou vytváří. P�
 	--
 	1.6.2.rc1.20.g8c5b.dirty
 
-Tyto soubory záplaty můžete také upravit a přidat k nim další informace určené pro seznam příjemců e-mailu, u nichž nechcete, aby byly obsaženy ve zprávě k revizi. Přidáte-li text mezi řádek `--` a začátek záplaty (řádek `lib/simplegit.rb`), vývojářům se zobrazí, ale aplikace záplaty ho obsahovat nebude.
+Tyto soubory záplaty můžete také upravit a přidat k nim další informace určené pro seznam příjemců e-mailu, u nichž nechcete, aby byly obsaženy ve zprávě k revizi. Přidáte-li text mezi řádek `---` a začátek záplaty (řádek `lib/simplegit.rb`), vývojářům se zobrazí, ale aplikace záplaty ho obsahovat nebude.
 
 Chcete-li e-mail odeslat do poštovní konference, můžete soubor buď vložit do svého e-mailového programu, nebo ho odeslat pomocí příkazového řádku. Vložení textu může často způsobovat problémy s formátováním, zvlášť v případě některých „chytřejších“ klientů, kteří správně nezachovávají nové řádky a jiné prázdné znaky. Git naštěstí nabízí nástroj, který vám pomůže odeslat správně formátované patche pomocí protokolu IMAP. Já budu dokumentovat odeslání záplaty na příkladu Gmailu, který používám jako svého e-mailového agenta. Podrobné instrukce pro celou řadu poštovních programů najdete na konci již dříve zmíněného souboru `Documentation/SubmittingPatches` ve zdrojovém kódu systému Git.
 
@@ -532,7 +532,26 @@ Nejprve je třeba nastavit sekci „imap“ v souboru `~/.gitconfig`. Každou ho
 	  sslverify = false
 
 Pokud váš server IMAP nepoužívá SSL, dva poslední řádky zřejmě nebudou vůbec třeba a hodnota hostitele bude `imap://`, a nikoli `imaps://`.
-Až toto nastavení dokončíte, můžete použít příkaz `git send-email`, jímž umístíte sérii patchů do složky Koncepty (Drafts) zadaného serveru IMAP:
+Až toto nastavení dokončíte, můžete použít příkaz `git imap-send`, jímž umístíte sérii záplat (patch) do složky Koncepty (Drafts) zadaného serveru IMAP:
+
+	$ cat *.patch |git imap-send
+	Resolving imap.gmail.com... ok
+	Connecting to [74.125.142.109]:993... ok
+	Logging in...
+	sending 2 messages
+	100% (2/2) done
+
+V tomto okamžiku byste měli být schopni přejít do složky Drafts, změnit pole To na mailing list, do kterého záplatu posíláte, případně pole CC na správce nebo na osobu zodpovědnou za tuto část, a odeslat.
+
+Záplaty můžete odesílat i přes SMTP server. Stejně jako v předchozím případu můžete nastavit sérií příkazů `git config` každou hodnotu zvlášť, nebo je můžete vložit ručně do sekce sendemail souboru `~/.gitconfig`:
+
+	[sendemail]
+	  smtpencryption = tls
+	  smtpserver = smtp.gmail.com
+	  smtpuser = user@gmail.com
+	  smtpserverport = 587
+
+Jakmile je to hotové, můžete záplaty odeslat příkazem `git send-email`:
 
 	$ git send-email *.patch
 	0001-added-limit-to-log-function.patch
@@ -558,8 +577,6 @@ Git poté vytvoří log s určitými informacemi, který bude pro každou zápla
 	References: <y>
 
 	Result: OK
-
-V tomto okamžiku můžete přejít do své složky Koncepty, změnit pole Komu na adresáty z poštovní konference, jimž chcete záplatu odeslat, případně přidat kopii na správce nebo osobu odpovědnou za tuto část a e-mail odeslat.
 
 ### Shrnutí ###
 
@@ -594,7 +611,7 @@ Pokud dostanete záplatu od někoho, kdo ji vygeneroval příkazem `git diff` ne
 
 Tím změníte soubory ve svém pracovním adresáři. Je to téměř stejné, jako byste k aplikaci záplaty použili příkaz `patch -p1`. Tento postup je však přísnější a nepřijímá tolik přibližných shod jako příkaz patch. Poradí si také s přidanými, odstraněnými a přejmenovanými soubory, jsou-li popsány ve formátu `git diff`, což příkaz `patch` nedělá. A konečně příkaz `git apply` pracuje na principu „aplikuj vše, nebo zruš vše“. Buď jsou tedy aplikovány všechny soubory, nebo žádný. Naproti tomu příkaz `patch` může aplikovat soubory záplaty jen částečně a zanechat váš pracovní adresář v neurčitém stavu. Příkaz `git apply` je tedy celkově víc paranoidní než příkaz `patch`. Tímto příkazem ostatně ani nezapíšete revizi, po jeho spuštění budete muset připravit a zapsat provedené změny ručně.
 
-Příkaz git apply můžete použít také ke kontrole, zda bude záplata aplikována čistě. V takovém případě použijte na patch příkaz `git apply --check`:
+Příkaz `git apply` můžete použít také ke kontrole, zda bude záplata aplikována čistě. V takovém případě použijte na patch příkaz `git apply --check`:
 
 	$ git apply --check 0001-seeing-if-this-helps-the-gem.patch
 	error: patch failed: ticgit.gemspec:1
@@ -615,7 +632,7 @@ K aplikaci patche vygenerovaného příkazem `format-patch` použijte příkaz `
 
 	Limit log functionality to the first 20
 
-Toto je začátek výstupu příkazu format-patch, s nímž jsme se setkali v předchozí části. Zároveň je to také platný e-mailový formát mbox. Jestliže vám přispěvatel řádně poslal záplatu e-mailem pomocí příkazu git send-email a vy záplatu stáhnete do formátu mbox, můžete na soubor mbox použít příkaz git am, který začne aplikovat všechny záplaty, které najde. Jestliže spustíte poštovního klienta, který dokáže uložit několik e-mailů ve formátu mbox, můžete do jednoho souboru uložit celou sérii záplat a příkazem git am je pak aplikovat všechny najednou.
+Toto je začátek výstupu příkazu format-patch, s nímž jsme se setkali v předchozí části. Zároveň je to také platný e-mailový formát mbox. Jestliže vám přispěvatel řádně poslal záplatu e-mailem pomocí příkazu `git send-email` a vy záplatu stáhnete do formátu mbox, můžete na soubor mbox použít příkaz `git am`, který začne aplikovat všechny záplaty, které najde. Jestliže spustíte poštovního klienta, který dokáže uložit několik e-mailů ve formátu mbox, můžete do jednoho souboru uložit celou sérii záplat a příkazem `git am` je pak aplikovat všechny najednou.
 
 Pokud však někdo nahrál soubor záplaty vygenerovaný příkazem `format-patch` do tiketového nebo podobného systému, můžete soubor uložit lokálně a poté na tento uložený soubor použít příkaz `git am`. Tímto způsobem záplatu aplikujete:
 
@@ -740,11 +757,11 @@ Můžete tedy explicitně najít společného předka obou větví a spustit na 
 	36c7dba2c95e6bbb78dfa822519ecfec6e1ca649
 	$ git diff 36c7db
 
-To však není příliš pohodlný způsob, a proto Git nabízí jinou možnost, jak lze provést stejnou věc: trojtečkovou syntax. V kontextu příkazu `diff` můžete vložit tři tečky za druhou větev – získáte výpis `diff` mezi poslední revizí větve, na níž se nacházíte, a společným předkem s druhou větví:
+To však není příliš pohodlný způsob, a proto Git nabízí jinou možnost, jak lze provést stejnou věc: trojtečkovou syntaxi. V kontextu příkazu `diff` můžete vložit tři tečky za druhou větev – získáte výpis `diff` mezi poslední revizí větve, na níž se nacházíte, a společným předkem s druhou větví:
 
 	$ git diff master...contrib
 
-Tento příkaz zobrazí pouze práci, která byla ve vaší aktuální tematické větvi provedena od chvíle, kdy se oddělila od hlavní větve. Určitě uděláte dobře, pokud si tuto syntax zapamatujete.
+Tento příkaz zobrazí pouze práci, která byla ve vaší aktuální tematické větvi provedena od chvíle, kdy se oddělila od hlavní větve. Určitě uděláte dobře, pokud si tuto syntaxi zapamatujete.
 
 ### Integrace příspěvků ###
 
@@ -755,23 +772,23 @@ Když už je práce v tematické větvi připravena a může být integrována d
 Jeden jednoduchý pracovní postup začlení vaší práci do větve `master`. V tomto scénáři obsahuje vaše větev `master` převážně jen stabilní kód. Máte-li v tematické větvi práci, kterou jste vytvořili nebo kterou vám někdo doručil a vy jste ji schválili, začleníte ji do své hlavní větve, smažete tematickou větev a proces může pokračovat. Máme-li repozitář s prací ve dvou větvích pojmenovaných `ruby_client` a `php_client`, který vypadá jako na obrázku 5-19, a začleníme nejprve větev `ruby_client` a poté `php_client`, bude naše historie vypadat jako na obrázku 5-20.
 
 Insert 18333fig0519.png
-Figure 5-19. Historie s několika tematickými větvemi
+Obrázek 5-19. Historie s několika tematickými větvemi
 
 Insert 18333fig0520.png
-Figure 5-20. Po začlenění tematické větve
+Obrázek 5-20. Po začlenění tematické větve
 
 Jedná se patrně o nejjednodušší pracovní postup. Je však problematický, pokud ho používáme u velkých repozitářů nebo projektů.
 
 Máte-li více vývojářů nebo větší projekt, pravděpodobně budete chtít použít přinejmenším dvoufázový cyklus začlenění. V tomto scénáři máte dvě dlouhodobé větve, hlavní větev `master` a větev `develop`. Určíte, že větev `master` bude aktualizována, pouze když je k dispozici velmi stabilní verze a do větve `develop` je integrován veškerý nový kód. Obě tyto větve pravidelně odesíláte do veřejného repozitáře. Pokaždé, když máte novou tematickou větev k začlenění (obrázek 5-21), začleníte ji do větve `develop` (obrázek 5-22). Když poté označujete vydání, posunete větev `master` rychle vpřed do místa, kde je nyní větev `develop` stabilní (obrázek 5-23).
 
 Insert 18333fig0521.png
-Figure 5-21. Před začleněním tematické větve
+Obrázek 5-21. Před začleněním tematické větve
 
 Insert 18333fig0522.png
-Figure 5-22. Po začlenění tematické větve
+Obrázek 5-22. Po začlenění tematické větve
 
 Insert 18333fig0523.png
-Figure 5-23. Po vydání tematické větve
+Obrázek 5-23. Po vydání tematické větve
 
 Pokud někdo při tomto postupu klonuje repozitář vašeho projektu, může provést buď checkout hlavní větve, aby získal nejnovější stabilní verzi a udržoval ji aktuální, nebo checkout větve develop, která může být ještě o něco napřed.
 Tento koncept můžete dále rozšířit o integrační větev, v níž budete veškerou práci slučovat. Teprve pokud je kód v této větvi stabilní a projde testováním, začleníte ho do větve develop. A až se větev develop ukáže v některém okamžiku jako stabilní, posunete rychle vpřed i svou hlavní větev.
@@ -781,12 +798,12 @@ Tento koncept můžete dále rozšířit o integrační větev, v níž budete v
 Váš projekt Git má čtyři trvalé větve: `master`, `next` a `pu` (proposed updates, tj. návrh aktualizací) pro novou práci a `maint` pro backporty správy. Pokud přispěvatelé vytvoří novou práci, je shromažďována v tematických větvích v repozitáři správce podobným způsobem, jaký už jsem popisoval (viz obrázek 5-24). Nyní budou tematické větve vyhodnoceny, zda jsou bezpečné a mohou být aplikovány, nebo zda potřebují další úpravy. Jsou-li vyhodnoceny jako bezpečné, budou začleněny do větve `next` a ta bude následně odeslána do repozitáře, aby mohli všichni vyzkoušet, jak fungují tematické větve po sloučení.
 
 Insert 18333fig0524.png
-Figure 5-24. Správa komplexní série současně zpracovávaných příspěvků v tematických větvích
+Obrázek 5-24. Správa komplexní série současně zpracovávaných příspěvků v tematických větvích
 
 Pokud ale tematické větve vyžadují další úpravy, budou začleněny do větve `pu`. Pokud se ukáže, že jsou tyto tematické větve naprosto stabilní, budou začleněny do větve `master` a poté budou znovu sestaveny z tematických větví, které byly ve větvi `next`, ale ještě se nedostaly do větve `master`. To znamená, že se větev `master` téměř neustále posouvá vpřed, větev `next` je čas od času přeskládána a větev `pu` je přeskládávána ještě o něco častěji (viz obrázek 5-25).
 
 Insert 18333fig0525.png
-Figure 5-25. Začlenění tematických větví s příspěvky do dlouhodobých integračních větví
+Obrázek 5-25. Začlenění tematických větví s příspěvky do dlouhodobých integračních větví
 
 Byla-li tematická větev konečně začleněna do větve `master`, může být odstraněna z repozitáře. Projekt Git má kromě toho větev `maint`, která byla odštěpena z posledního vydání a představuje záplaty backportované pro případ, že by bylo třeba vydat opravnou verzi. Pokud tedy klonujete repozitář Git, můžete stáhnout až čtyři větve, a hodnotit tak projekt na čtyřech různých úrovních vývoje. Záleží na vás, do jaké hloubky chcete proniknout nebo jak chcete přispívat. A správce projektu má k dispozici strukturovaný pracovní postup k evaluaci nových příspěvků.
 
@@ -797,7 +814,7 @@ Jiní správci dávají před začleněním práce z příspěvků přednost jej
 Druhým způsobem, jak přesunout práci z jedné větve do druhé, je tzv. částečné převzetí (angl. cherry picking, tedy něco jako „vyzobání třešniček“). Částečné převzetí lze v systému Git přirovnat k přeskládání jedné revize. Při této operaci vezme systém záplatu, která byla provedena v dané revizi, a pokusí se ji znovu aplikovat na větev, na níž se právě nacházíte. To využijete například v situaci, kdy máte několik revizí v tematické větvi, ale chcete integrovat pouze jednu z nich. Částečné převzetí však můžete použít i místo přeskládání, pokud máte v tematické větvi pouze jednu revizi. Uvažujme tedy projekt, který vypadá jako na obrázku 5-26.
 
 Insert 18333fig0526.png
-Figure 5-26. Uvažovaná historie před částečným převzetím
+Obrázek 5-26. Uvažovaná historie před částečným převzetím
 
 Chcete-li do hlavní větve natáhnout revizi `e43a6`, můžete zadat následující příkaz:
 
@@ -809,7 +826,7 @@ Chcete-li do hlavní větve natáhnout revizi `e43a6`, můžete zadat následuj�
 Tímto natáhnete stejnou změnu, která byla provedena revizí `e43a6`, avšak hodnota SHA-1 obou revizí se bude lišit, neboť bude rozdílné datum aplikace. Vaše historie revizí bude nyní vypadat jako na obrázku 5-27.
 
 Insert 18333fig0527.png
-Figure 5-27. Historie po částečném převzetí revize z tematické větve
+Obrázek 5-27. Historie po částečném převzetí revize z tematické větve
 
 Nyní můžete tematickou větev odstranit a zahodit revize, které nehodláte natáhnout do jiné větve.
 
@@ -895,4 +912,3 @@ Výstupem příkazu je čisté shrnutí všech revizí od v1.0.1, seskupené pod
 ## Shrnutí ##
 
 V tomto okamžiku byste tedy už měli hravě zvládat přispívání do projektů v systému Git, správu vlastního projektu i integraci příspěvků jiných uživatelů. Gratulujeme, nyní je z vás efektivní vývojář v systému Git! V další kapitole poznáte další výkonné nástroje a tipy k řešení složitých situací, které z vás udělají opravdového mistra mezi uživateli systému Git.
-

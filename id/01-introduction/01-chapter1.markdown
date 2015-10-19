@@ -161,9 +161,9 @@ Atau jika anda menggunakan distro berbasis Debian seperti Ubuntu, coba gunakan a
 
 ### Menginstall Git pada Mac ###
 
-Terdapat dua cara mudah untuk menginstal Git pada sebuah komputer Mac. Cara termudah adalah menggunakan installer Git berbasis GUI, yang dapat anda peroleh dari halaman Google Code (lihat Gambar 1-7):
+Terdapat dua cara mudah untuk menginstal Git pada sebuah komputer Mac. Cara termudah adalah menggunakan installer Git berbasis GUI, yang dapat anda peroleh dari halaman SourceForge (lihat Gambar 1-7):
 
-	http://code.google.com/p/git-osx-installer
+	http://sourceforge.net/projects/git-osx-installer/
 
 Insert 18333fig0107.png 
 Gambar 1-7. Git OS X installer.
@@ -176,9 +176,9 @@ Anda tidak harus menambahkan extras-nya, tetapi anda mungkin membutuhkan +svn ji
 
 ### Menginstall pada Sistem Operasi Windows ###
 
-Menginstall Git pada Windows sangatlah mudah. Cara termudah dapat anda peroleh dengan menggunakan msysGit. Cukup download file installernya dari halaman Google Code, lalu eksekusi.
+Menginstall Git pada Windows sangatlah mudah. Cara termudah dapat anda peroleh dengan menggunakan msysGit. Cukup download file installernya dari halaman GitHub, lalu eksekusi.
 
-	http://code.google.com/p/msysgit
+	http://msysgit.github.com/
 
 Setelah terinstall, anda akan memperoleh versi command-line (bersama dengan klien SSH yang praktis) dan versi GUI-nya.
 

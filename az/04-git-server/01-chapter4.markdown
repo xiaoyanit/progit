@@ -52,9 +52,9 @@ Probably the most common transport protocol for Git is SSH. This is because SSH 
 
 To clone a Git repository over SSH, you can specify ssh:// URL like this:
 
-	$ git clone ssh://user@server:project.git
+	$ git clone ssh://user@server/project.git
 
-Or you can not specify a protocol — Git assumes SSH if you aren’t explicit:
+Or you can use the shorter scp-like syntax for SSH protocol:
 	
 	$ git clone user@server:project.git
 
@@ -70,7 +70,7 @@ The negative aspect of SSH is that you can’t serve anonymous access of your re
 
 ### The Git Protocol ###
 
-Next is the Git protocol. This is a special daemon that comes packaged with Git; it listens on a dedicated port (9418) that provides a service similar to the SSH protocol, but with absolutely no authentication. In order for a repository to be served over the Git protocol, you must create the `git-export-daemon-ok` file — the daemon won’t serve a repository without that file in it — but other than that there is no security. Either the Git repository is available for everyone to clone or it isn’t. This means that there is generally no pushing over this protocol. You can enable push access; but given the lack of authentication, if you turn on push access, anyone on the internet who finds your project’s URL could push to your project. Suffice it to say that this is rare.
+Next is the Git protocol. This is a special daemon that comes packaged with Git; it listens on a dedicated port (9418) that provides a service similar to the SSH protocol, but with absolutely no authentication. In order for a repository to be served over the Git protocol, you must create the `git-daemon-export-ok` file — the daemon won’t serve a repository without that file in it — but other than that there is no security. Either the Git repository is available for everyone to clone or it isn’t. This means that there is generally no pushing over this protocol. You can enable push access; but given the lack of authentication, if you turn on push access, anyone on the internet who finds your project’s URL could push to your project. Suffice it to say that this is rare.
 
 #### The Pros ####
 
@@ -369,7 +369,7 @@ Gitosis requires some Python tools, so first you have to install the Python setu
 
 Next, you clone and install Gitosis from the project’s main site:
 
-	$ git clone git://eagain.net/gitosis.git
+	$ git clone https://github.com/tv42/gitosis.git
 	$ cd gitosis
 	$ sudo python setup.py install
 
@@ -724,7 +724,7 @@ If you don’t want to go through all of the work involved in setting up your ow
 
 These days, you have a huge number of hosting options to choose from, each with different advantages and disadvantages. To see an up-to-date list, check out the following page:
 
-	http://en.wikipedia.org/wiki/Git_(software)#Source_code_hosting
+	https://git.wiki.kernel.org/index.php/GitHosting
 
 Because we can’t cover all of them, and because I happen to work at one of them, we’ll use this section to walk through setting up an account and creating a new project at GitHub. This will give you an idea of what is involved. 
 
@@ -738,7 +738,7 @@ GitHub is also a commercial company that charges for accounts that maintain priv
 
 ### Setting Up a User Account ###
 
-The first thing you need to do is set up a free user account. If you visit the Pricing and Signup page at `http://github.com/plans` and click the "Sign Up" button on the Free account (see figure 4-2), you’re taken to the signup page.
+The first thing you need to do is set up a free user account. If you visit the "Plans and pricing" page at `https://github.com/pricing` and click the "Sign Up" button on the Free account (see figure 4-2), you’re taken to the signup page.
 
 Insert 18333fig0402.png
 Figure 4-2. The GitHub plan page.
